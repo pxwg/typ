@@ -1,9 +1,9 @@
 # Collection of Typst Code
 
-- [packages][./packages]: Packages for Typst
-- [templates][./templates]: Templates for Typst
-- [examples][./examples]: Examples
-- [tests][./tests]: Examples
+- [packages](./packages): Packages for Typst
+- [templates](./templates): Templates for Typst
+- [examples](./examples): Examples
+- [tests](./tests): Examples
 
 ## Code Conventions
 
