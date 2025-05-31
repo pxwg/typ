@@ -39,7 +39,8 @@ git submodule add https://github.com/Myriad-Dreamin/typ.git
 You could fork and modify this repository, and then add it as a submodule in your own Typst project:
 
 ```bash
-git submodule add https://github.com/YOUR-NAME/typ.git -b YOUR-BRANCH-NAME
+git rm --cached typ && rm -rf ./typ
+git submodule add -b YOUR-BRANCH-NAME https://github.com/YOUR-NAME/typ.git
 ```
 
 This gives opportunity to merge efforts together in future.
