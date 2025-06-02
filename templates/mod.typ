@@ -43,6 +43,7 @@
 #let blog-tags = (
   programming: "Programming",
   software: "Software",
+  network: "Network",
   software-engineering: "Software Engineering",
   tooling: "Tooling",
   linux: "Linux",
