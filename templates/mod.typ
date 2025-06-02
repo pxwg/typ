@@ -50,6 +50,7 @@
   compiler: "Compiler",
   music-theory: "Music Theory",
   tinymist: "Tinymist",
+  golang: "Golang",
   typst: "Typst",
   misc: "Miscellaneous",
 )
