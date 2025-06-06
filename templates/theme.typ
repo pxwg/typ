@@ -1,6 +1,7 @@
-#import "@preview/shiroa:0.2.3": templates
+#import "@preview/shiroa:0.2.3": templates, book-sys
 #import templates: *
-#import "target.typ": sys-is-html-target
+
+#let sys-is-html-target = book-sys.sys-is-html-target
 
 // Theme (Colors)
 #let dark-theme = book-theme-from(toml("theme-style.toml"), xml: it => xml(it), target: "web-ayu")
