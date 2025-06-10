@@ -1,6 +1,7 @@
 #import "@preview/shiroa:0.2.3": templates, book-sys
 #import templates: *
 
+#let is-md-target = book-sys.target == "md"
 #let sys-is-html-target = book-sys.sys-is-html-target
 
 // Theme (Colors)
@@ -20,23 +21,32 @@
   light-theme
 }
 
-#let theme-frame(render, tag: "div", theme-tag: none) = if sys-is-html-target {
+#let theme-frame(render, tag: "div", theme-tag: none) = if is-md-target {
+  show: html.elem.with(tag)
+  show: html.elem.with("picture")
+  html.elem(
+    "m1source",
+    attrs: (media: "(prefers-color-scheme: dark)"),
+    render(dark-theme),
+  )
+  render(light-theme)
+} else if sys-is-html-target {
   if theme-tag == none {
     theme-tag = tag
   }
   html.elem(
     tag,
-    attrs: ("class": "code-image themed"),
+    attrs: (class: "code-image themed"),
     {
       html.elem(
         theme-tag,
         render(dark-theme),
-        attrs: ("class": "dark"),
+        attrs: (class: "dark"),
       )
       html.elem(
         theme-tag,
         render(light-theme),
-        attrs: ("class": "light"),
+        attrs: (class: "light"),
       )
     },
   )
