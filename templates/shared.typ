@@ -51,7 +51,9 @@
   code-extra-colors: code-extra-colors,
 ) = default-theme
 
-#let markup-rules(body) = {
+#let markup-rules(body, lang: none, region: none) = {
+  set text(lang: lang) if lang != none
+  set text(region: region) if region != none
   set text(font: pdf-fonts) if build-kind == "monthly"
 
   set text(main-size) if sys-is-html-target
@@ -193,6 +195,8 @@
   date: "2024-08-15",
   tags: (),
   kind: "post",
+  lang: none,
+  region: none,
   show-outline: true,
   archive-indices: (),
   archive-creator: default-archive-creator,
@@ -208,7 +212,10 @@
     )
 
     // markup setting
-    show: markup-rules
+    show: markup-rules.with(
+      lang: lang,
+      region: region,
+    )
     // math setting
     show: equation-rules
     // code block setting
