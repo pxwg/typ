@@ -302,6 +302,8 @@
       description: plain-text(desc),
       date: date,
       tags: tags,
+      lang: lang,
+      region: region,
       ..if kind == "monthly" {
         (indices: archive-indices)
       },
