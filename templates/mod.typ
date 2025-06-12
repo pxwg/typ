@@ -4,6 +4,7 @@
 #import "theme.typ": theme-frame
 #import "@preview/shiroa:0.2.3": plain-text, templates
 #import templates: get-label-disambiguator, label-disambiguator, make-unique-label
+#import "env.typ": *
 
 #let code-image = if sys-is-html-target {
   it => {

@@ -184,6 +184,26 @@
   body
 }
 
+#let visual-rules(body) = {
+  // Resolves the path to the image source
+  let resolve(path) = (
+    path.replace(
+      // Substitutes the paths with some assumption.
+      // In the astro sites, the assets are store in `public/` directory.
+      regex("^[./]*/public/"),
+      url-base,
+    )
+  )
+
+  show image: it => context if shiroa-sys-target() == "paged" {
+    it
+  } else {
+    html.elem("img", attrs: (src: resolve(it.source)))
+  }
+
+  body
+}
+
 #let default-archive-creator = (indices, body) => {
   indices.map(fname => include "/content/article/" + fname + ".typ").join(pagebreak(weak: true))
 }
@@ -220,6 +240,8 @@
     show: equation-rules
     // code block setting
     show: code-block-rules
+    // visualization setting
+    show: visual-rules
 
     show: it => if sys-is-html-target {
       show footnote: it => context {
