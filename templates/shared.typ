@@ -185,6 +185,7 @@
 }
 
 #let visual-rules(body) = {
+  import "env.typ": url-base
   // Resolves the path to the image source
   let resolve(path) = (
     path.replace(
