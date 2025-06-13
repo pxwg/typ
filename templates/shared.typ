@@ -5,6 +5,14 @@
 #import "mod.typ": *
 #import "theme.typ": *
 
+// Settings
+// todo: load from env or config?
+#let use-mathyml = true
+
+#import "../packages/mathyml.typ": prelude
+#import "empty.typ" as _empty
+#import if use-mathyml { prelude } else { _empty }: *
+
 // Metadata
 #let is-html-target = is-html-target()
 #let is-pdf-target = is-pdf-target()
@@ -104,6 +112,19 @@
   } else {
     it
   }
+  body
+}
+
+// https://codeberg.org/akida/mathyml
+#let mathyml-equation-rules(body) = {
+  import "../packages/mathyml.typ": try-to-mathml
+
+  // math rules
+  show math.equation: set text(weight: 500)
+  // show math.equation: to-mathml
+  show math.equation: try-to-mathml
+
+
   body
 }
 
@@ -238,7 +259,7 @@
       region: region,
     )
     // math setting
-    show: equation-rules
+    show: if use-mathyml { mathyml-equation-rules } else { equation-rules }
     // code block setting
     show: code-block-rules
     // visualization setting
