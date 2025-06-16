@@ -1,5 +1,5 @@
 #import "@preview/cmarker:0.1.5"
-#import "blog.typ": markup-rules, equation-rules, code-block-rules
+#import "blog.typ": markup-rules, equation-rules, code-block-rules, plain-text
 // markup setting
 #show: markup-rules
 // math setting
@@ -10,4 +10,16 @@
   raw-typst: false,
   it.text,
   h1-level: 2,
+  html: (
+    userref: (attrs, body) => html.elem(
+      "a",
+      attrs: (href: "#user-" + plain-text(body), class: "userref"),
+      "@" + plain-text(body),
+    ),
+    commentref: (attrs, body) => html.elem(
+      "a",
+      attrs: (href: "#comment-" + plain-text(body), class: "commentref"),
+      "@comment:" + plain-text(body),
+    ),
+  ),
 )
