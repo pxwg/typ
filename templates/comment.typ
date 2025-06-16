@@ -11,7 +11,7 @@
   raw-typst: false,
   it.text,
   h1-level: 2,
-  math: mitex,
+  // math: mitex,
   html: (
     userref: (attrs, body) => html.elem(
       "a",
