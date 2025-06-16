@@ -1,4 +1,5 @@
 #import "@preview/cmarker:0.1.5"
+#import "@preview/mitex:0.2.5": mitex
 #import "blog.typ": markup-rules, equation-rules, code-block-rules, plain-text
 // markup setting
 #show: markup-rules
@@ -10,6 +11,7 @@
   raw-typst: false,
   it.text,
   h1-level: 2,
+  math: mitex,
   html: (
     userref: (attrs, body) => html.elem(
       "a",
