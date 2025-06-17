@@ -21,7 +21,7 @@
   light-theme
 }
 
-#let theme-frame(render, tag: "div", theme-tag: none) = if is-md-target {
+#let theme-frame(render, tag: "div", class: none, theme-tag: none) = if is-md-target {
   show: html.elem.with(tag)
   show: html.elem.with("picture")
   html.elem(
@@ -36,7 +36,7 @@
   }
   html.elem(
     tag,
-    attrs: (class: "code-image themed"),
+    attrs: (class: "code-image themed" + if class != none { " " + class }),
     {
       html.elem(
         theme-tag,

@@ -1,19 +1,20 @@
 
 #import "@preview/fletcher:0.5.7"
 #import "target.typ": sys-is-html-target
-#import "theme.typ": theme-frame
+#import "theme.typ": theme-frame, default-theme
 #import "@preview/shiroa:0.2.3": plain-text, templates
 #import templates: get-label-disambiguator, label-disambiguator, make-unique-label
 
 #let code-image = if sys-is-html-target {
-  it => {
-    theme-frame(theme => {
+  (it, ..attrs) => {
+    theme-frame.with(..attrs)(theme => {
       set text(fill: theme.main-color)
-      html.frame(it)
+      set line(stroke: theme.main-color)
+      html.frame(if type(it) == function { it(theme) } else { it })
     })
   }
 } else {
-  it => it
+  (it, ..attrs) => if type(it) == function { it(default-theme) } else { it }
 }
 
 /// Alternative resolves all heading as static link
