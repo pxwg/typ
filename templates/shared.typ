@@ -25,8 +25,9 @@
 
 #let build-kind = sys.inputs.at("build-kind", default: default-kind)
 
-#let pdf-fonts = (
+#let text-fonts = (
   "Libertinus Serif",
+  // todo: exclude it if language is not Chinese.
   "Source Han Serif SC",
 )
 
@@ -62,7 +63,7 @@
 #let markup-rules(body, lang: none, region: none) = {
   set text(lang: lang) if lang != none
   set text(region: region) if region != none
-  set text(font: pdf-fonts) if build-kind == "monthly"
+  set text(font: text-fonts)
 
   set text(main-size) if sys-is-html-target
   set text(fill: rgb("dfdfd6")) if is-dark-theme and sys-is-html-target
