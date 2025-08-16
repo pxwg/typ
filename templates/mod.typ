@@ -1,9 +1,11 @@
 
 #import "@preview/fletcher:0.5.7"
 #import "target.typ": sys-is-html-target
-#import "theme.typ": theme-frame, default-theme
+#import "theme.typ": default-theme, theme-frame
 #import "@preview/shiroa:0.2.3": plain-text, templates
-#import templates: get-label-disambiguator, label-disambiguator, make-unique-label
+#import templates: (
+  get-label-disambiguator, label-disambiguator, make-unique-label,
+)
 
 #let code-image = if sys-is-html-target {
   (it, ..attrs) => {
@@ -27,7 +29,10 @@
     str(
       make-unique-label(
         title,
-        disambiguator: label-disambiguator.at(elem.location()).at(title, default: 0) + 1,
+        disambiguator: label-disambiguator
+          .at(elem.location())
+          .at(title, default: 0)
+          + 1,
       ),
     )
   }
@@ -55,6 +60,11 @@
   golang: "Golang",
   typst: "Typst",
   misc: "Miscellaneous",
+  physics: "Physics",
+  math: "Math",
+  quantum-field: "Quantum Field Theory",
+  topology: "Topology",
+  abstract-nonsense: "Abstract Nonsense",
 )
 
 #let archive-tags = (

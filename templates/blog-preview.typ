@@ -82,7 +82,7 @@
 
 #let text_size = {
   if preview == "true" {
-    16pt
+    15pt
   } else {
     10pt
   }
@@ -137,6 +137,7 @@
     font: font,
   )
   align(center, text(textsize + 8pt)[ *#title* ])
+  align(center, text(textsize - 1pt)[ #emph(desc) ])
   align(center, text(textsize - 1pt)[ #emph(date) ])
   show math.equation: set text(font: math_font)
   doc
