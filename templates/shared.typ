@@ -118,12 +118,13 @@
 
 // https://codeberg.org/akida/mathyml
 #let mathyml-equation-rules(body) = {
-  import "../packages/mathyml.typ": try-to-mathml
+  import "../packages/mathyml.typ" as mathyml: try-to-mathml
 
   // math rules
+  show math.equation: try-to-mathml
   show math.equation: set text(weight: 500)
   // show math.equation: to-mathml
-  show math.equation: try-to-mathml
+  mathyml.stylesheets(include-fonts: false)
 
 
   body
