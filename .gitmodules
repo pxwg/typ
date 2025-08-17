@@ -8,3 +8,6 @@
 [submodule "packages/typst-metalogo"]
   path = packages/typst-metalogo
   url = https://github.com/lonkaars/typst-metalogo
+[submodule "typst-physics"]
+	path = packages/typst-physics
+	url = https://github.com/Leedehai/typst-physics.git

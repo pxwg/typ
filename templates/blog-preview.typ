@@ -120,7 +120,7 @@
         spacing: textsize / 2,
         [#smallcaps[#date]
           #h(1fr)
-          #smallcaps[#title]
+          // #smallcaps[#title]
           #h(1fr)
           #counter(page).display(
             "1/1",
