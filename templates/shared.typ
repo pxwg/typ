@@ -7,7 +7,7 @@
 
 // Settings
 // todo: load from env or config?
-#let use-mathyml = true
+#let use-mathyml = false
 
 #import "../packages/mathyml.typ": prelude
 #import "empty.typ" as _empty
@@ -28,8 +28,10 @@
 #let text-fonts = (
   "Libertinus Serif",
   // todo: exclude it if language is not Chinese.
-  "Source Han Serif SC",
+  // "Source Han Serif SC",
 )
+
+#let math-font = "STIX Two Math"
 
 #let code-font = (
   "DejaVu Sans Mono",
@@ -90,12 +92,12 @@
 }
 
 #let equation-rules(body) = {
-  show math.equation: set text(weight: 400)
+  show math.equation: set text(font: math-font)
   show math.equation.where(block: true): it => context if shiroa-sys-target() == "html" {
     theme-frame(
       tag: "div",
       theme => {
-        set text(fill: theme.main-color)
+        set text(fill: theme.main-color, size: 13pt)
         p-frame(attrs: ("class": "block-equation", "role": "math"), it)
       },
     )
@@ -106,7 +108,7 @@
     theme-frame(
       tag: "span",
       theme => {
-        set text(fill: theme.main-color)
+        set text(fill: theme.main-color, size: 13pt)
         span-frame(attrs: (class: "inline-equation"), it)
       },
     )
