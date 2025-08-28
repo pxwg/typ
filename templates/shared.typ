@@ -1,6 +1,8 @@
 
 #import "../packages/zebraw.typ": *
-#import "@preview/shiroa:0.2.3": is-web-target, is-pdf-target, plain-text, is-html-target, templates
+#import "@preview/shiroa:0.2.3": (
+  is-html-target, is-pdf-target, is-web-target, plain-text, templates,
+)
 #import templates: *
 #import "mod.typ": *
 #import "theme.typ": *
@@ -48,7 +50,11 @@
 #let list-indent = 0.5em
 
 /// Creates an embedded block typst frame.
-#let div-frame(content, attrs: (:), tag: "div") = html.elem(tag, html.frame(content), attrs: attrs)
+#let div-frame(content, attrs: (:), tag: "div") = html.elem(
+  tag,
+  html.frame(content),
+  attrs: attrs,
+)
 #let span-frame = div-frame.with(tag: "span")
 #let p-frame = div-frame.with(tag: "p")
 
@@ -93,7 +99,9 @@
 
 #let equation-rules(body) = {
   show math.equation: set text(font: math-font)
-  show math.equation.where(block: true): it => context if shiroa-sys-target() == "html" {
+  show math.equation.where(block: true): it => context if (
+    shiroa-sys-target() == "html"
+  ) {
     theme-frame(
       tag: "div",
       theme => {
@@ -104,7 +112,9 @@
   } else {
     it
   }
-  show math.equation.where(block: false): it => context if shiroa-sys-target() == "html" {
+  show math.equation.where(block: false): it => context if (
+    shiroa-sys-target() == "html"
+  ) {
     theme-frame(
       tag: "span",
       theme => {
@@ -171,7 +181,9 @@
       let code-extra-colors = theme.code-extra-colors
       let use-fg = not inline and code-extra-colors.fg != none
       set text(fill: code-extra-colors.fg) if use-fg
-      set text(fill: if theme.is-dark { rgb("dfdfd6") } else { black }) if not use-fg
+      set text(fill: if theme.is-dark { rgb("dfdfd6") } else {
+        black
+      }) if not use-fg
       set raw(theme: theme-style.code-theme) if theme.style.code-theme.len() > 0
       set par(justify: false)
       zebraw(
@@ -184,7 +196,9 @@
   )
 
   show raw: set text(font: code-font)
-  show raw.where(block: false): it => context if shiroa-sys-target() == "paged" {
+  show raw.where(block: false): it => context if (
+    shiroa-sys-target() == "paged"
+  ) {
     it
   } else {
     mk-raw(it, tag: "span", inline: true)
@@ -231,7 +245,9 @@
 }
 
 #let default-archive-creator = (indices, body) => {
-  indices.map(fname => include "/content/article/" + fname + ".typ").join(pagebreak(weak: true))
+  indices
+    .map(fname => include "/content/article/" + fname + ".typ")
+    .join(pagebreak(weak: true))
 }
 
 /// sub-chapters is only used in monthly (archive) build.
@@ -372,7 +388,12 @@
       ),
       {
         outline-counter.step(level: it.level)
-        static-heading-link(it.element, body: [#sym.section#context outline-counter.display("1.") #it.element.body])
+        static-heading-link(
+          it.element,
+          body: [#sym.section#context outline-counter.display(
+              "1.",
+            ) #it.element.body],
+        )
       },
     )
     html.elem(
