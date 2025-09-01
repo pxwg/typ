@@ -47,6 +47,7 @@
 }
 
 #let blog-tags = (
+  macos: "macOS",
   programming: "Programming",
   software: "Software",
   network: "Network",
