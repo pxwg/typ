@@ -269,7 +269,7 @@
   show: it => if is-same-kind {
     // set basic document metadata
     set document(
-      author: ("Myriad-Dreamin",),
+      author: ("Xinyu Xiang",),
       ..if not is-web-target { (title: title) },
     )
 
@@ -362,7 +362,7 @@
   if kind == "monthly" or is-same-kind [
     #metadata((
       title: plain-text(title),
-      author: "Myriad-Dreamin",
+      author: "Xinyu Xiang",
       description: plain-text(desc),
       date: date,
       tags: tags,
