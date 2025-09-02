@@ -30,7 +30,7 @@
 #let pdf-fonts = (
   "Libertinus Serif",
   // todo: exclude it if language is not Chinese.
-  // "Source Han Serif SC",
+  "Source Han Serif SC",
 )
 
 #let math-font = "STIX Two Math"
