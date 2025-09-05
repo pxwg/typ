@@ -6,7 +6,7 @@
 
 #let translation-disclaimer-old(original-path: "", lang: "en") = {
   let out-lang = language-switch(lang: lang)
-  let path = original-path + "?explicit_lang=" + out-lang
+  let path = original-path + "?lang=" + out-lang
   let disclaimer-text = if lang == "zh" [
     #text(fill: rgb("#888"), size: 0.9em)[
       📝 *翻译声明：* 本文由 LLM 从原文翻译而来，可能存在翻译不准确之处。建议阅读 #link(path)[原文] 以获得最准确的内容。
@@ -33,7 +33,7 @@
 #let translation-disclaimer-new(original-path: "", lang: "en") = {
   let out-lang = language-switch(lang: lang)
   let path = (
-    "../../" + out-lang + "/" + original-path + "?explicit_lang=" + out-lang
+    "../../" + out-lang + "/" + original-path + "/" + "?lang=" + out-lang
   )
   let disclaimer-text = if lang == "zh" [
     #text(fill: rgb("#888"), size: 0.9em)[
