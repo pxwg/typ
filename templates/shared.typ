@@ -427,3 +427,162 @@
       .join()
   }
 }
+
+// Translation disclaimer template for blog localization
+// Generates disclaimer notices for LLM-translated content
+#let language-switch(lang: "en") = {
+  if lang == "zh" { return "en" } else { "zh" }
+}
+
+#let translation-disclaimer-old(original-path: "", lang: "en") = {
+  let out-lang = language-switch(lang: lang)
+  let path = original-path + "?lang=" + out-lang
+  let disclaimer-text = if lang == "zh" [
+    #text(fill: rgb("#888"), size: 0.9em)[
+      📝 *翻译声明：* 本文由 LLM 从原文翻译而来，可能存在翻译不准确之处。建议阅读 #link(path)[原文] 以获得最准确的内容。
+    ]
+  ] else [
+    #text(fill: rgb("#888"), size: 0.9em)[
+      📝 *Translation Notice:* This article was translated from the original by LLM and may contain inaccuracies. Please refer to the #link(path)[original article] for the most accurate content.
+    ]
+  ]
+
+  // Add some spacing and styling
+  v(0.5em)
+  block(
+    width: 100%,
+    inset: 12pt,
+    radius: 6pt,
+    fill: rgb("#f8f9fa"),
+    stroke: (left: 3pt + rgb("#007acc")),
+    disclaimer-text,
+  )
+  v(1em)
+}
+
+#let translation-disclaimer-new(
+  original-path: "",
+  lang: "en",
+  target: "pdf",
+) = {
+  let out-lang = language-switch(lang: lang)
+  let path = "../../" + out-lang + "/" + original-path + "/?lang=" + out-lang
+
+  // HTML / web target: use theme-frame so colors follow dynamic theme switching (like code blocks)
+  if target == "web" or target == "html" {
+    theme-frame(
+      tag: "div",
+      theme => {
+        // derive colors from theme (fallbacks similar to code block logic)
+        let border-color = theme.dash-color.to-hex()
+        let bg-color = if theme.is-dark {
+          if theme.code-extra-colors.bg != none {
+            theme.code-extra-colors.bg.to-hex()
+          } else { "#202225" }
+        } else {
+          if theme.code-extra-colors.bg != none {
+            theme.code-extra-colors.bg.to-hex()
+          } else { "#f8f9fa" }
+        }
+        let text-color = if theme.is-dark {
+          if theme.code-extra-colors.fg != none {
+            theme.code-extra-colors.fg.to-hex()
+          } else { "#bbbbbb" }
+        } else { "#666666" }
+
+        let style-str = (
+          "margin:0.75em 0;padding:0.75em 0.9em;"
+            + "border-left:3px solid "
+            + str(border-color)
+            + ";"
+            + "background:"
+            + str(bg-color)
+            + ";"
+            + "border-radius:6px;"
+            + "color:"
+            + str(text-color)
+            + ";"
+            + "font-size:0.9em;line-height:1.35"
+        )
+
+        html.elem(
+          "div",
+          attrs: (
+            class: "translation-disclaimer",
+            style: style-str,
+          ),
+          if lang == "zh" [
+            📝 #emph[翻译声明：] 本文由 LLM 从原文翻译而来，可能存在翻译不准确之处。建议阅读 #link(path)[原文] 以获得最准确的内容。
+          ] else [
+            📝 #emph[Translation Notice:] This article was translated from the original by LLM and may contain inaccuracies. Please refer to the #link(path)[original article] for the most accurate content.
+          ],
+        )
+      },
+    )
+  } else {
+    let border-color = dash-color
+    let bg-color = if is-dark-theme {
+      if code-extra-colors.bg != none { code-extra-colors.bg } else {
+        "#202225"
+      }
+    } else {
+      if code-extra-colors.bg != none { code-extra-colors.bg } else {
+        "#f8f9fa"
+      }
+    }
+    let text-color = if is-dark-theme {
+      if code-extra-colors.fg != none { code-extra-colors.fg } else {
+        "#bbbbbb"
+      }
+    } else { "#666666" }
+
+    let disclaimer-text = if lang == "zh" [
+      #text(fill: text-color, size: 0.9em)[
+        📝 *翻译声明：* 本文由 LLM 从原文翻译而来，可能存在翻译不准确之处。建议阅读 #link(path)[原文] 以获得最准确的内容。
+      ]
+    ] else [
+      #text(fill: text-color, size: 0.9em)[
+        📝 *Translation Notice:* This article was translated from the original by LLM and may contain inaccuracies. Please refer to the #link(path)[original article] for the most accurate content.
+      ]
+    ]
+
+    v(0.5em)
+    block(
+      width: 100%,
+      inset: 12pt,
+      radius: 6pt,
+      fill: bg-color,
+      stroke: (left: 3pt + border-color),
+      disclaimer-text,
+    )
+    v(1em)
+  }
+}
+
+#let get-target() = {
+  let target = if is-html-target {
+    return "html"
+  } else if is-web-target {
+    return "web"
+  } else if is-pdf-target {
+    return "pdf"
+  } else {
+    return "other"
+  }
+}
+
+#let translation-disclaimer(original-path: "", lang: "en") = {
+  let target = get-target()
+  if original-path.starts-with("../../") {
+    translation-disclaimer-old(
+      original-path: original-path,
+      lang: lang,
+    )
+  } else {
+    translation-disclaimer-new(
+      original-path: original-path,
+      lang: lang,
+      target: target,
+    )
+  }
+}
