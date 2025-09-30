@@ -222,3 +222,26 @@
     $qed$
   ]
 }
+
+#let main = conf.with()
+#let blog-tags = (
+  macos: "macOS",
+  programming: "Programming",
+  software: "Software",
+  network: "Network",
+  software-engineering: "Software Engineering",
+  tooling: "Tooling",
+  linux: "Linux",
+  dev-ops: "DevOps",
+  compiler: "Compiler",
+  music-theory: "Music Theory",
+  tinymist: "Tinymist",
+  golang: "Golang",
+  typst: "Typst",
+  misc: "Miscellaneous",
+  physics: "Physics",
+  math: "Math",
+  quantum-field: "Quantum Field Theory",
+  topology: "Topology",
+  abstract-nonsense: "Abstract Nonsense",
+)
