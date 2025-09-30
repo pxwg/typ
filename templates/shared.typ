@@ -28,7 +28,7 @@
 #let build-kind = sys.inputs.at("build-kind", default: default-kind)
 
 #let pdf-fonts = (
-  "Libertinus Serif",
+  "STIX Two Text",
   // todo: exclude it if language is not Chinese.
   "Source Han Serif SC",
 )
