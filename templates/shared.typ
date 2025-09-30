@@ -614,7 +614,7 @@
 
         let style-str = (
           "margin:0.75em 0;padding:0.75em 0.9em;"
-            + +"font-size:0.9em;line-height:1.35"
+            + "font-size:0.9em;line-height:1.35"
             + "border-left:3px solid "
             + str(border-color)
             + ";"
