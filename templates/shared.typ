@@ -41,7 +41,7 @@
 
 // Sizes
 #let main-size = if sys-is-html-target {
-  16pt
+  20pt
 } else {
   10.5pt
 }
