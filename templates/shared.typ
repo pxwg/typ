@@ -586,3 +586,87 @@
     )
   }
 }
+
+#let block_with_color(
+  content: "",
+) = {
+  let target = get-target()
+  // HTML / web target: use theme-frame so colors follow dynamic theme switching (like code blocks)
+  if target == "web" or target == "html" {
+    theme-frame(
+      tag: "div",
+      theme => {
+        let border-color = theme.dash-color.to-hex()
+        let bg-color = if theme.is-dark {
+          if theme.code-extra-colors.bg != none {
+            theme.code-extra-colors.bg.to-hex()
+          } else { "#202225" }
+        } else {
+          if theme.code-extra-colors.bg != none {
+            theme.code-extra-colors.bg.to-hex()
+          } else { "#f8f9fa" }
+        }
+        let text-color = if theme.is-dark {
+          if theme.code-extra-colors.fg != none {
+            theme.code-extra-colors.fg.to-hex()
+          } else { "#bbbbbb" }
+        } else { "#666666" }
+
+        let style-str = (
+          "margin:0.75em 0;padding:0.75em 0.9em;"
+            + "font-size:0.9em;line-height:1.35"
+            + "border-left:3px solid "
+            + str(border-color)
+            + ";"
+            + "background:"
+            + str(bg-color)
+            + ";"
+            + "border-radius:6px;"
+            + "color:"
+            + str(text-color)
+            + ";"
+        )
+
+        html.elem(
+          "div",
+          attrs: (
+            class: "colored-block",
+            style: style-str,
+          ),
+          content,
+        )
+      },
+    )
+  } else {
+    let border-color = dash-color
+    let bg-color = if is-dark-theme {
+      if code-extra-colors.bg != none { code-extra-colors.bg } else {
+        "#202225"
+      }
+    } else {
+      if code-extra-colors.bg != none { code-extra-colors.bg } else {
+        "#f8f9fa"
+      }
+    }
+    let text-color = if is-dark-theme {
+      if code-extra-colors.fg != none { code-extra-colors.fg } else {
+        "#bbbbbb"
+      }
+    } else { "#666666" }
+
+    text(fill: text-color, size: 0.9em)[
+      #content
+    ]
+
+    v(0.5em)
+    block(
+      width: 100%,
+      inset: 12pt,
+      radius: 6pt,
+      fill: bg-color,
+      stroke: (left: 3pt + border-color),
+      disclaimer-text,
+    )
+    v(1em)
+  }
+}
