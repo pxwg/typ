@@ -105,7 +105,7 @@
     theme-frame(
       tag: "div",
       theme => {
-        set text(fill: theme.main-color, size: 13pt)
+        set text(fill: theme.main-color, size: 13pt, font: math-font)
         p-frame(attrs: ("class": "block-equation", "role": "math"), it)
       },
     )
@@ -118,7 +118,7 @@
     theme-frame(
       tag: "span",
       theme => {
-        set text(fill: theme.main-color, size: 13pt)
+        set text(fill: theme.main-color, size: 13pt, font: math-font)
         span-frame(attrs: (class: "inline-equation"), it)
       },
     )
