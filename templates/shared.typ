@@ -694,3 +694,31 @@
     link(path)[Open PDF]
   }
 }
+
+#let image_viewer(path: "", height: "60vh") = {
+  let target = get-target()
+  if target == "html" or target == "web" {
+    html.elem(
+      "div",
+      attrs: (
+        class: "image-viewer",
+        style: "width:100%;height:"
+          + height
+          + ";margin:1rem 0;display:flex;align-items:center;justify-content:center;overflow:auto;background:transparent;",
+      ),
+      [
+        #html.elem(
+          "img",
+          attrs: (
+            src: path,
+            style: "max-width:100vw;max-height:100%;width:auto;height:auto;display:block;object-fit:contain;border-radius:0;",
+            loading: "lazy",
+            alt: "image",
+          ),
+        )
+      ],
+    )
+  } else {
+    link(path)[open image]
+  }
+}
