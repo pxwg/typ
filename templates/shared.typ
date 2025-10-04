@@ -704,7 +704,7 @@
         class: "image-viewer",
         style: "width:100%;height:"
           + height
-          + ";margin:0.25rem 0;display:flex;align-items:center;justify-content:center;overflow:auto;background:transparent;",
+          + ";margin:clamp(0.1rem,2vw,0.5rem) 0;display:flex;align-items:center;justify-content:center;overflow:auto;background:transparent;",
       ),
       [
         #html.elem(
