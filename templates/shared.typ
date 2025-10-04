@@ -670,3 +670,26 @@
     v(1em)
   }
 }
+
+
+#let pdf_viewer(path: "", height: "80vh") = {
+  let target = get-target()
+  if target == "html" or target == "web" {
+    html.elem(
+      "div",
+      attrs: (class: "pdf-viewer", style: "width:100%;height:" + height + ";"),
+      [
+        #html.elem(
+          "embed",
+          attrs: (
+            src: path,
+            type: "application/pdf",
+            style: "width:100%;height:100%;border:none;display:block;",
+          ),
+        )
+      ],
+    )
+  } else {
+    link(path)[Open PDF]
+  }
+}
