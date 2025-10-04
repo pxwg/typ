@@ -680,11 +680,12 @@
       attrs: (class: "pdf-viewer", style: "width:100%;height:" + height + ";"),
       [
         #html.elem(
-          "embed",
+          "iframe",
           attrs: (
             src: path,
             type: "application/pdf",
-            style: "width:100%;height:100%;border:none;display:block;",
+            style: "width:100%;max-width:100vw;height:100%;min-height:60vh;border:none;display:block;overflow:auto;",
+            allowfullscreen: "true",
           ),
         )
       ],
