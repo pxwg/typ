@@ -677,7 +677,10 @@
   if target == "html" or target == "web" {
     html.elem(
       "div",
-      attrs: (class: "pdf-viewer", style: "width:100%;height:" + height + ";"),
+      attrs: (
+        class: "pdf-viewer",
+        style: "width:100%;height:" + height + ";margin:0.1rem;",
+      ),
       [
         #html.elem(
           "iframe",
@@ -704,7 +707,7 @@
         class: "image-viewer",
         style: "width:100%;height:"
           + height
-          + ";margin:clamp(0.1rem,2vw,0.5rem) 0;display:flex;align-items:center;justify-content:center;overflow:auto;background:transparent;",
+          + ";margin:0.1rem;display:flex;align-items:center;justify-content:center;overflow:auto;background:transparent;",
       ),
       [
         #html.elem(
