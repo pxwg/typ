@@ -672,14 +672,14 @@
 }
 
 
-#let pdf_viewer(path: "", height: "80vh") = {
+#let pdf_viewer(path: "") = {
   let target = get-target()
   if target == "html" or target == "web" {
     html.elem(
       "div",
       attrs: (
         class: "pdf-viewer",
-        style: "width:100%;height:" + height + ";margin:0.1rem;",
+        style: "width:auto;height:auto;margin:0.1rem;",
       ),
       [
         #html.elem(
@@ -698,16 +698,15 @@
   }
 }
 
-#let image_viewer(path: "", height: "60vh") = {
+#let image_viewer(path: "") = {
   let target = get-target()
   if target == "html" or target == "web" {
     html.elem(
       "div",
       attrs: (
         class: "image-viewer",
-        style: "width:100%;height:"
-          + height
-          + ";margin:0.1rem;display:flex;align-items:center;justify-content:center;overflow:auto;background:transparent;",
+        style: "width:auto;height:auto"
+          + ";margin:min(0.5em,max(0.1em,2vw));display:flex;align-items:center;justify-content:center;overflow:auto;background:transparent;",
       ),
       [
         #html.elem(
