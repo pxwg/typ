@@ -714,7 +714,7 @@
           "img",
           attrs: (
             src: path,
-            style: "max-width:100vw;max-height:100%;width:auto;height:auto;display:block;object-fit:contain;border-radius:0;",
+            style: "width:auto;height:auto;display:block;object-fit:contain;border-radius:0;",
             loading: "lazy",
             alt: "image",
           ),
