@@ -589,9 +589,11 @@
 
 #let block_with_color(
   content: "",
+  icon: "📌",
+  title: "本节概要",
 ) = {
   let target = get-target()
-  // HTML / web target: use theme-frame so colors follow dynamic theme switching (like code blocks)
+  // html / web target: use theme-frame so colors follow dynamic theme switching (like code blocks)
   if target == "web" or target == "html" {
     theme-frame(
       tag: "div",
@@ -609,22 +611,39 @@
         let text-color = if theme.is-dark {
           if theme.code-extra-colors.fg != none {
             theme.code-extra-colors.fg.to-hex()
-          } else { "#bbbbbb" }
-        } else { "#666666" }
+          } else { "#e8e8e8" }
+        } else { "#2c3e50" }
+
+        let title-color = if theme.is-dark { "#5dade2" } else { "#3498db" }
 
         let style-str = (
-          "margin:0.75em 0;padding:0.75em 0.9em;"
-            + "font-size:0.9em;line-height:1.35"
-            + "border-left:3px solid "
+          "margin:0.75em 0;padding:0;"
+            + "font-size:0.95em;line-height:1.5"
+            + ";border-left:4px solid "
             + str(border-color)
             + ";"
             + "background:"
             + str(bg-color)
             + ";"
-            + "border-radius:6px;"
+            + "border-radius:8px;"
             + "color:"
             + str(text-color)
             + ";"
+            + "box-shadow:0 2px 8px rgba(0,0,0,0.08);"
+        )
+
+        let title-style = (
+          "display:flex;align-items:center;gap:0.5em;"
+            + "padding:0.6em 0.9em;margin:0;"
+            + "font-weight:600;font-size:0.95em;"
+            + "color:"
+            + str(title-color)
+            + ";"
+            + "border-bottom:1px solid rgba(128,128,128,0.15);"
+        )
+
+        let content-style = (
+          "padding:0.75em 0.9em;"
         )
 
         html.elem(
@@ -633,7 +652,13 @@
             class: "colored-block",
             style: style-str,
           ),
-          content,
+          [
+            #html.elem("div", attrs: (style: title-style), [
+              #html.elem("span", attrs: (style: "font-size:1.1em;"), icon)
+              #html.elem("span", title)
+            ])
+            #html.elem("div", attrs: (style: content-style), content)
+          ],
         )
       },
     )
@@ -650,24 +675,22 @@
     }
     let text-color = if is-dark-theme {
       if code-extra-colors.fg != none { code-extra-colors.fg } else {
-        "#bbbbbb"
+        "#e8e8e8"
       }
-    } else { "#666666" }
+    } else { "#2c3e50" }
 
-    text(fill: text-color, size: 0.9em)[
-      #content
-    ]
-
-    v(0.5em)
     block(
       width: 100%,
-      inset: 12pt,
-      radius: 6pt,
+      inset: (left: 12pt, right: 12pt, top: 10pt, bottom: 10pt),
+      radius: 8pt,
       fill: bg-color,
-      stroke: (left: 3pt + border-color),
-      disclaimer-text,
+      stroke: (left: 4pt + border-color),
+      [
+        #text(fill: rgb("#3498db"), weight: "bold", size: 0.95em)[#icon #title]
+        #v(0.3em)
+        #text(fill: text-color, size: 0.95em)[#content]
+      ],
     )
-    v(1em)
   }
 }
 
@@ -679,7 +702,7 @@
       "div",
       attrs: (
         class: "pdf-viewer",
-        style: "width:auto;height:auto;margin:0.1rem;",
+        style: "width:auto;height:auto;margin:0.1rem;display:flex;align-items:center;justify-content:center;overflow:auto;background:transparent;",
       ),
       [
         #html.elem(
@@ -687,7 +710,7 @@
           attrs: (
             src: path,
             type: "application/pdf",
-            style: "width:100%;max-width:100vw;height:100%;min-height:60vh;border:none;display:block;overflow:auto;",
+            style: "max-width:70vw;width:auto;height:60vh;min-height:40vh;border:none;display:block;overflow:auto;",
             allowfullscreen: "true",
           ),
         )
@@ -713,7 +736,7 @@
           "img",
           attrs: (
             src: path,
-            style: "width:auto;height:auto;display:block;object-fit:contain;border-radius:0;",
+            style: "max-width:70%;width:auto;height:auto;display:block;object-fit:contain;border-radius:0;",
             loading: "lazy",
             alt: "image",
           ),
