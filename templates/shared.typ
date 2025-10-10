@@ -736,7 +736,7 @@
           "img",
           attrs: (
             src: path,
-            style: "max-width:70%;width:auto;height:auto;display:block;object-fit:contain;border-radius:0;",
+            style: "max-width:33vw;width:auto;height:auto;display:block;object-fit:contain;border-radius:0.5em;",
             loading: "lazy",
             alt: "image",
           ),
@@ -745,5 +745,34 @@
     )
   } else {
     link(path)[open image]
+  }
+}
+
+#let image_gallery(paths: ()) = {
+  let target = get-target()
+  if target == "html" or target == "web" {
+    html.elem(
+      "div",
+      attrs: (
+        class: "image-gallery",
+        style: "display:flex;flex-direction:row;overflow-x:auto;gap:1em;"
+          + "padding:0.5em 0;background:transparent;align-items:center;justify-content:center;",
+      ),
+      paths
+        .map(path => {
+          html.elem(
+            "img",
+            attrs: (
+              src: path,
+              style: "max-width:300px;max-height:200px;width:auto;height:auto;display:block;object-fit:contain;border-radius:0.5em;flex:0 0 auto;",
+              loading: "lazy",
+              alt: "gallery image",
+            ),
+          )
+        })
+        .join(),
+    )
+  } else {
+    paths.map(path => link(path)[open image]).join([ ])
   }
 }
