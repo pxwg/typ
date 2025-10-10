@@ -721,7 +721,7 @@
   }
 }
 
-#let image_viewer(path: "") = {
+#let image_viewer(path: "", desc: "") = {
   let target = get-target()
   if target == "html" or target == "web" {
     html.elem(
@@ -729,29 +729,43 @@
       attrs: (
         class: "image-viewer",
         style: "width:auto;height:auto"
-          + ";margin:min(0.5em,max(0.1em,2vw));display:flex;align-items:center;justify-content:center;overflow:auto;background:transparent;",
+          + ";margin:min(0.5em,max(0.1em,2vw));display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:auto;background:transparent;",
       ),
       [
         #html.elem(
           "img",
           attrs: (
             src: path,
-            style: "max-width:60vw;width:auto;height:auto;display:block;object-fit:contain;border-radius:0.5em;",
+            style: "max-width:33vw;max-height:200px;width:auto;height:auto;display:block;object-fit:contain;border-radius:0.5em;",
             loading: "lazy",
             alt: "image",
           ),
         )
+        #if desc != "" {
+          html.elem(
+            "div",
+            attrs: (
+              class: "image-desc",
+              style: "margin-top:0.5em;font-size:0.9em;color:#888;text-align:center;max-width:33vw;",
+            ),
+            [#desc],
+          )
+        }
       ],
     )
   } else {
-    link(path)[open image]
+    if desc != "" {
+      link(path)[open image] + [ (#desc)]
+    } else {
+      link(path)[open image]
+    }
   }
 }
 
-#let image_gallery(paths: ()) = {
+#let image_gallery(paths: (), desc: "") = {
   let target = get-target()
   if target == "html" or target == "web" {
-    html.elem(
+    let gallery = html.elem(
       "div",
       attrs: (
         class: "image-gallery",
@@ -772,7 +786,27 @@
         })
         .join(),
     )
+    if desc != "" {
+      [
+        #gallery
+        #html.elem(
+          "div",
+          attrs: (
+            class: "gallery-desc",
+            style: "margin-top:1em;font-size:1em;color:#888;text-align:center;width:100%;",
+          ),
+          [#desc],
+        )
+      ]
+    } else {
+      gallery
+    }
   } else {
-    paths.map(path => link(path)[open image]).join([ ])
+    let imgs = paths.map(path => link(path)[open image]).join([ ])
+    if desc != "" {
+      [#imgs (#desc)]
+    } else {
+      imgs
+    }
   }
 }
