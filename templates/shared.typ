@@ -376,6 +376,17 @@
     )) <frontmatter>
   ]
 
+  // Add llm-translated metadata as HTML data attribute for Astro
+  context if is-same-kind and sys-is-html-target and llm-translated {
+    html.elem(
+      "meta",
+      attrs: (
+        name: "llm-translated",
+        content: "true",
+      ),
+    )
+  }
+
   context if show-outline and is-same-kind and sys-is-html-target {
     if query(heading).len() == 0 {
       return
