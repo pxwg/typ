@@ -262,6 +262,7 @@
   show-outline: true,
   archive-indices: (),
   archive-creator: default-archive-creator,
+  llm-translated: false,
   body,
 ) = {
   let is-same-kind = build-kind == kind
@@ -368,6 +369,7 @@
       tags: tags,
       lang: lang,
       region: region,
+      llm-translated: llm-translated,
       ..if kind == "monthly" {
         (indices: archive-indices)
       },
