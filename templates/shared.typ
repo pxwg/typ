@@ -736,37 +736,81 @@
   }
 }
 
-#let image_viewer(path: "", desc: "") = {
+// Display an image with adaptive dark mode support.
+//
+// Parameters:
+// - path (str): Path to the image file
+// - desc (str): Optional description text below the image
+// - dark-adapt (bool): Whether to apply dark mode adaptation (default: false)
+// - adapt-mode (str): Dark mode adaptation strategy (default: "darken")
+//   * "invert": Full inversion with hue rotation (best for pure white backgrounds)
+//   * "invert-no-hue": Invert brightness only, preserving hue (best for colored diagrams)
+//   * "darken": Reduce brightness and increase contrast (best for general use)
+#let image_viewer(
+  path: "",
+  desc: "",
+  dark-adapt: false,
+  adapt-mode: "darken",
+) = {
   let target = get-target()
   if target == "html" or target == "web" {
-    html.elem(
-      "div",
-      attrs: (
-        class: "image-viewer",
-        style: "width:auto;height:auto"
-          + ";margin:min(0.5em,max(0.1em,2vw));display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:auto;background:transparent;",
-      ),
-      [
-        #html.elem(
-          "img",
-          attrs: (
-            src: path,
-            style: "max-width:60vw;max-height:200px;width:auto;height:auto;display:block;object-fit:contain;border-radius:0.5em;",
-            loading: "lazy",
-            alt: "image",
-          ),
-        )
-        #if desc != "" {
-          html.elem(
-            "div",
-            attrs: (
-              class: "image-desc",
-              style: "margin-top:0.5em;font-size:0.9em;color:#888;text-align:center;max-width:33vw;",
-            ),
-            [#desc],
-          )
+    theme-frame(
+      tag: "div",
+      theme => {
+        let img-filter = if dark-adapt and theme.is-dark {
+          if adapt-mode == "invert" {
+            "invert(1) hue-rotate(180deg)"
+          } else if adapt-mode == "invert-no-hue" {
+            "invert(1)"
+          } else if adapt-mode == "darken" {
+            "brightness(0.8) contrast(1.1)"
+          } else {
+            "none"
+          }
+        } else {
+          "none"
         }
-      ],
+
+        // Description text color follows theme
+        let desc-color = if theme.is-dark {
+          "#aaa"
+        } else {
+          "#888"
+        }
+
+        html.elem(
+          "div",
+          attrs: (
+            class: "image-viewer",
+            style: "width:auto;height:auto;margin:min(0.5em,max(0.1em,3vw));display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:auto;padding:0.5em;",
+          ),
+          [
+            #html.elem(
+              "img",
+              attrs: (
+                src: path,
+                style: "max-width:60vw;max-height:200px;width:auto;height:auto;display:block;object-fit:contain;border-radius:0.5em;filter:"
+                  + img-filter
+                  + ";transition:filter 0.3s ease;",
+                loading: "lazy",
+                alt: "image",
+              ),
+            )
+            #if desc != "" {
+              html.elem(
+                "div",
+                attrs: (
+                  class: "image-desc",
+                  style: "margin-top:0.5em;font-size:0.9em;color:"
+                    + desc-color
+                    + ";text-align:center;max-width:33vw;transition:color 0.3s ease;",
+                ),
+                [#desc],
+              )
+            }
+          ],
+        )
+      },
     )
   } else {
     if desc != "" {
