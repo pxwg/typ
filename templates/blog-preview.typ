@@ -107,6 +107,8 @@
   desc: "",
   date: "2025-10-01",
   tags: "",
+  lang: "en",
+  translationKey: none,
   doc,
 ) = {
   let textsize = custume_text.size
