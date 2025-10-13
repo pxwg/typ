@@ -11,3 +11,11 @@
 [submodule "packages/typst-physics"]
 	path = packages/typst-physics
 	url = https://github.com/Leedehai/typst-physics
+[submodule "packages/typst-fletcher"]
+	path = packages/typst-fletcher
+	url = https://github.com/Jollywatt/typst-fletcher
+	branch = main
+[submodule "packages/ctez"]
+	path = packages/ctez
+	url = https://github.com/cetz-package/cetz.git
+	branch = master
