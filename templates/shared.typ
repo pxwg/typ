@@ -1,4 +1,4 @@
-
+#import "../packages/typst-fletcher.typ": *
 #import "../packages/zebraw.typ": *
 #import "@preview/shiroa:0.2.3": (
   is-html-target, is-pdf-target, is-web-target, plain-text, templates,
@@ -48,6 +48,7 @@
 // ,
 #let heading-sizes = (22pt, 18pt, 14pt, 12pt, main-size)
 #let list-indent = 0.5em
+#let math-size = 12pt
 
 /// Creates an embedded block typst frame.
 #let div-frame(content, attrs: (:), tag: "div") = html.elem(
@@ -105,7 +106,7 @@
     theme-frame(
       tag: "div",
       theme => {
-        set text(fill: theme.main-color, size: 13pt, font: math-font)
+        set text(fill: theme.main-color, size: math-size, font: math-font)
         p-frame(attrs: ("class": "block-equation", "role": "math"), it)
       },
     )
@@ -118,7 +119,7 @@
     theme-frame(
       tag: "span",
       theme => {
-        set text(fill: theme.main-color, size: 13pt, font: math-font)
+        set text(fill: theme.main-color, size: math-size, font: math-font)
         span-frame(attrs: (class: "inline-equation"), it)
       },
     )
