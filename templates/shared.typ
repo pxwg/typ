@@ -1259,6 +1259,7 @@
 //
 // Parameters:
 // - diagram-content: The diagram content or a function that takes edge style and returns the content
+// Example: diagram-content = edge => ...
 #let diagram-frame(diagram-content) = {
   let target = get-target()
   if target == "web" or target == "html" {
