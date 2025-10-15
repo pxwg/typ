@@ -870,3 +870,304 @@
     }
   }
 }
+
+// Theorem-like environments with theme support
+#let theorem-block(
+  content,
+  title: "Theorem",
+  icon: "📐",
+  number: none,
+  border-color-light: rgb("#3498db"),
+  border-color-dark: rgb("#5dade2"),
+  bg-color-light: rgb("#e8f4f8"),
+  bg-color-dark: rgb("#1a2332"),
+) = {
+  let target = get-target()
+  if target == "web" or target == "html" {
+    theme-frame(
+      tag: "div",
+      theme => {
+        let border-color = if theme.is-dark {
+          border-color-dark.to-hex()
+        } else {
+          border-color-light.to-hex()
+        }
+
+        let bg-color = if theme.is-dark {
+          bg-color-dark.to-hex()
+        } else {
+          bg-color-light.to-hex()
+        }
+
+        let text-color = if theme.is-dark {
+          "#e8e8e8"
+        } else {
+          "#2c3e50"
+        }
+
+        let title-color = if theme.is-dark {
+          border-color-dark.to-hex()
+        } else {
+          border-color-light.to-hex()
+        }
+
+        let style-str = (
+          "margin:0.5em 0;padding:0;"
+            + "border-left:3px solid "
+            + str(border-color)
+            + ";"
+            + "background:"
+            + str(bg-color)
+            + ";"
+            + "border-radius:4px;"
+            + "color:"
+            + str(text-color)
+            + ";"
+            + "box-shadow:0 1px 4px rgba(0,0,0,0.06);"
+            + "transition:all 0.3s ease;"
+        )
+
+        let title-style = (
+          "display:flex;align-items:center;gap:0.4em;"
+            + "padding:0.4em 0.7em;margin:0;"
+            + "font-weight:600;font-size:0.95em;"
+            + "color:"
+            + str(title-color)
+            + ";"
+            + "border-bottom:1px solid rgba(128,128,128,0.1);"
+        )
+
+        let content-style = "padding:0.3em 0.7em;line-height:1.5;font-size:0.95em;"
+
+        let full-title = if number != none {
+          title + " " + str(number)
+        } else {
+          title
+        }
+
+        html.elem(
+          "div",
+          attrs: (
+            class: "theorem-block",
+            style: style-str,
+          ),
+          [
+            #html.elem("div", attrs: (style: title-style), [
+              #html.elem("span", attrs: (style: "font-size:1em;"), icon)
+              #html.elem("span", full-title)
+            ])
+            #html.elem("div", attrs: (style: content-style), content)
+          ],
+        )
+      },
+    )
+  } else {
+    let border-color = if is-dark-theme {
+      border-color-dark
+    } else {
+      border-color-light
+    }
+
+    let bg-color = if is-dark-theme {
+      bg-color-dark
+    } else {
+      bg-color-light
+    }
+
+    let text-color = if is-dark-theme {
+      rgb("#e8e8e8")
+    } else {
+      rgb("#2c3e50")
+    }
+
+    let full-title = if number != none {
+      title + " " + str(number)
+    } else {
+      title
+    }
+
+    block(
+      width: 100%,
+      inset: (left: 10pt, right: 10pt, top: 6pt, bottom: 6pt),
+      radius: 4pt,
+      fill: bg-color,
+      stroke: (left: 3pt + border-color),
+      [
+        #text(
+          fill: border-color,
+          weight: "bold",
+          size: 0.95em,
+        )[#icon #full-title]
+        #v(0.2em)
+        #text(fill: text-color, size: 0.95em)[#content]
+      ],
+    )
+  }
+}
+
+// Theorem
+#let theorem(content, number: none) = theorem-block(
+  content,
+  title: "Theorem",
+  icon: "📐",
+  number: number,
+  border-color-light: rgb("#3498db"),
+  border-color-dark: rgb("#5dade2"),
+  bg-color-light: rgb("#e8f4f8"),
+  bg-color-dark: rgb("#1a2332"),
+)
+
+// Claim
+#let claim(content, number: none) = theorem-block(
+  content,
+  title: "Claim",
+  icon: "💡",
+  number: number,
+  border-color-light: rgb("#f39c12"),
+  border-color-dark: rgb("#f4b350"),
+  bg-color-light: rgb("#fef5e7"),
+  bg-color-dark: rgb("#2d2416"),
+)
+
+// Remark
+#let remark(content, number: none) = theorem-block(
+  content,
+  title: "Remark",
+  icon: "💭",
+  number: number,
+  border-color-light: rgb("#9b59b6"),
+  border-color-dark: rgb("#bb8fce"),
+  bg-color-light: rgb("#f4ecf7"),
+  bg-color-dark: rgb("#231c26"),
+)
+
+// Proof
+#let proof(content, title: "Proof") = {
+  let target = get-target()
+  if target == "web" or target == "html" {
+    theme-frame(
+      tag: "div",
+      theme => {
+        let border-color = if theme.is-dark {
+          "#7f8c8d"
+        } else {
+          "#95a5a6"
+        }
+
+        let bg-color = if theme.is-dark {
+          "#1c1e20"
+        } else {
+          "#f9f9f9"
+        }
+
+        let text-color = if theme.is-dark {
+          "#d0d0d0"
+        } else {
+          "#34495e"
+        }
+
+        let style-str = (
+          "margin:0.5em 0;padding:0.5em 0.7em;"
+            + "border-left:2px solid "
+            + str(border-color)
+            + ";"
+            + "background:"
+            + str(bg-color)
+            + ";"
+            + "border-radius:4px;"
+            + "color:"
+            + str(text-color)
+            + ";"
+            + "font-style:italic;"
+            + "font-size:0.95em;"
+            + "transition:all 0.3s ease;"
+        )
+
+        let title-style = "font-weight:600;font-style:normal;margin-bottom:0.2em;"
+
+        html.elem(
+          "div",
+          attrs: (
+            class: "proof-block",
+            style: style-str,
+          ),
+          [
+            #html.elem("div", attrs: (style: title-style), [✓ #title.])
+            #html.elem("div", content)
+            #html.elem(
+              "div",
+              attrs: (style: "text-align:right;margin-top:0.3em;"),
+              [□],
+            )
+          ],
+        )
+      },
+    )
+  } else {
+    let border-color = if is-dark-theme {
+      rgb("#7f8c8d")
+    } else {
+      rgb("#95a5a6")
+    }
+
+    let bg-color = if is-dark-theme {
+      rgb("#1c1e20")
+    } else {
+      rgb("#f9f9f9")
+    }
+
+    let text-color = if is-dark-theme {
+      rgb("#d0d0d0")
+    } else {
+      rgb("#34495e")
+    }
+
+    block(
+      width: 100%,
+      inset: 8pt,
+      radius: 4pt,
+      fill: bg-color,
+      stroke: (left: 2pt + border-color),
+      [
+        #text(fill: text-color, weight: "bold", size: 0.95em)[✓ #title.]
+        #v(0.2em)
+        #text(fill: text-color, style: "italic", size: 0.95em)[#content]
+        #v(0.2em)
+        #align(right)[□]
+      ],
+    )
+  }
+}
+
+// Question
+#let question(content, number: none) = theorem-block(
+  content,
+  title: "Question",
+  icon: "❓",
+  number: number,
+  border-color-light: rgb("#e74c3c"),
+  border-color-dark: rgb("#ec7063"),
+  bg-color-light: rgb("#fadbd8"),
+  bg-color-dark: rgb("#2b1a19"),
+)
+
+// Custom block with configurable colors
+#let custom-block(
+  content,
+  title: "Note",
+  icon: "📌",
+  number: none,
+  border-color-light: rgb("#16a085"),
+  border-color-dark: rgb("#48c9b0"),
+  bg-color-light: rgb("#e8f8f5"),
+  bg-color-dark: rgb("#19302b"),
+) = theorem-block(
+  content,
+  title: title,
+  icon: icon,
+  number: number,
+  border-color-light: border-color-light,
+  border-color-dark: border-color-dark,
+  bg-color-light: bg-color-light,
+  bg-color-dark: bg-color-dark,
+)
