@@ -1006,9 +1006,9 @@
 }
 
 // Theorem
-#let theorem(content, number: none) = theorem-block(
+#let theorem(content, title: "", number: none) = theorem-block(
   content,
-  title: "Theorem",
+  title: "Theorem " + title,
   icon: "📐",
   number: number,
   border-color-light: rgb("#3498db"),
@@ -1041,68 +1041,151 @@
   bg-color-dark: rgb("#231c26"),
 )
 
+#let proof-counter = counter("proof-block-id")
+
 // Proof
-#let proof(content, title: "Proof") = {
+#let proof(content, title: "Proof", collapsed: true) = {
+  proof-counter.step()
   let target = get-target()
   if target == "web" or target == "html" {
-    theme-frame(
-      tag: "div",
-      theme => {
-        let border-color = if theme.is-dark {
-          "#7f8c8d"
-        } else {
-          "#95a5a6"
-        }
+    context {
+      theme-frame(
+        tag: "div",
+        theme => {
+          let border-color = if theme.is-dark {
+            "#7f8c8d"
+          } else {
+            "#95a5a6"
+          }
 
-        let bg-color = if theme.is-dark {
-          "#1c1e20"
-        } else {
-          "#f9f9f9"
-        }
+          let bg-color = if theme.is-dark {
+            "#1c1e20"
+          } else {
+            "#f9f9f9"
+          }
 
-        let text-color = if theme.is-dark {
-          "#d0d0d0"
-        } else {
-          "#34495e"
-        }
+          let text-color = if theme.is-dark {
+            "#d0d0d0"
+          } else {
+            "#34495e"
+          }
 
-        let style-str = (
-          "margin:0.5em 0;padding:0.5em 0.7em;"
-            + "border-left:2px solid "
-            + str(border-color)
-            + ";"
-            + "background:"
-            + str(bg-color)
-            + ";"
-            + "border-radius:4px;"
-            + "color:"
-            + str(text-color)
-            + ";"
-            + "font-style:italic;"
-            + "font-size:0.95em;"
-            + "transition:all 0.3s ease;"
-        )
+          let button-color = if theme.is-dark {
+            "#95a5a6"
+          } else {
+            "#7f8c8d"
+          }
 
-        let title-style = "font-weight:600;font-style:normal;margin-bottom:0.2em;"
+          let style-str = (
+            "margin:0.5em 0;padding:0;"
+              + "border-left:2px solid "
+              + str(border-color)
+              + ";"
+              + "background:"
+              + str(bg-color)
+              + ";"
+              + "border-radius:4px;"
+              + "color:"
+              + str(text-color)
+              + ";" // + "font-style:italic;"
+              // + "font-size:0.95em;"
+              + "transition:all 0.3s ease;"
+          )
 
-        html.elem(
-          "div",
-          attrs: (
-            class: "proof-block",
-            style: style-str,
-          ),
-          [
-            #html.elem("div", attrs: (style: title-style), [✓ #title.])
-            #html.elem("div", content)
-            #html.elem(
-              "div",
-              attrs: (style: "text-align:right;margin-top:0.3em;"),
-              [□],
+          let header-style = (
+            "display:flex;justify-content:space-between;align-items:center;"
+              + "padding:0.5em 0.7em;margin:0;"
+          )
+
+          let title-style = "font-weight:600;font-style:normal;"
+
+          let button-style = (
+            "cursor:pointer;border:none;background:transparent;"
+              + "color:"
+              + str(button-color)
+              + ";"
+              + "font-size:1.2em;padding:0;margin:0;"
+              + "transition:transform 0.2s ease,opacity 0.3s ease;"
+              + "opacity:0.7;line-height:1;"
+          )
+
+          let content-wrapper-style = if collapsed {
+            (
+              "overflow:hidden;transition:max-height 0.3s ease,opacity 0.3s ease;"
+                + "max-height:0px;opacity:0;"
             )
-          ],
-        )
-      },
-    )
+          } else {
+            (
+              "overflow:hidden;transition:max-height 0.3s ease,opacity 0.3s ease;"
+                + "max-height:1000px;opacity:1;"
+            )
+          }
+
+          let content-style = "padding:0 0.7em 0.5em 0.7em;"
+
+          let proof-id = "proof-" + str(proof-counter.get().first())
+
+          let initial-button-text = if collapsed { "+" } else { "−" }
+
+          html.elem(
+            "div",
+            attrs: (
+              class: "proof-block",
+              style: style-str,
+            ),
+            [
+              #html.elem("div", attrs: (style: header-style), [
+                #html.elem("span", attrs: (style: "font-size:1em;"), "📓")
+                #html.elem("span", title)
+                #html.elem(
+                  "button",
+                  attrs: (
+                    style: button-style
+                      + (
+                        if collapsed { "transform:rotate(90deg);" } else { "" }
+                      ),
+                    onclick: "
+                      const content = this.parentElement.nextElementSibling;
+                      const isCollapsed = content.style.maxHeight === '0px';
+                      if (isCollapsed) {
+                        content.style.maxHeight = '1000px';
+                        content.style.opacity = '1';
+                        this.textContent = '−';
+                        this.style.transform = 'rotate(0deg)';
+                      } else {
+                        content.style.maxHeight = '0px';
+                        content.style.opacity = '0';
+                        this.textContent = '+';
+                        this.style.transform = 'rotate(90deg)';
+                      }
+                      this.style.opacity = '1';
+                    ",
+                    onmouseover: "this.style.opacity='1';",
+                    onmouseout: "if(this.parentElement.nextElementSibling.style.maxHeight!=='0px')this.style.opacity='0.7';",
+                    "aria-label": "Toggle proof",
+                  ),
+                  initial-button-text,
+                )
+              ])
+              #html.elem(
+                "div",
+                attrs: (id: proof-id, style: content-wrapper-style),
+                [
+                  #html.elem("div", attrs: (style: content-style), content)
+                  #html.elem(
+                    "div",
+                    attrs: (
+                      style: "text-align:right;padding:0 0.7em 0.5em 0.7em;font-style:normal;",
+                    ),
+                    [□],
+                  )
+                ],
+              )
+            ],
+          )
+        },
+      )
+    }
   } else {
     let border-color = if is-dark-theme {
       rgb("#7f8c8d")
@@ -1124,16 +1207,16 @@
 
     block(
       width: 100%,
-      inset: 8pt,
+      inset: 6pt,
       radius: 4pt,
       fill: bg-color,
       stroke: (left: 2pt + border-color),
       [
         #text(fill: text-color, weight: "bold", size: 0.95em)[✓ #title.]
-        #v(0.2em)
+        #v(0.1em)
         #text(fill: text-color, style: "italic", size: 0.95em)[#content]
-        #v(0.2em)
-        #align(right)[□]
+        #v(0.1em)
+        #align(right)[#text(style: "normal")[□]]
       ],
     )
   }
