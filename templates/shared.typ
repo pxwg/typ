@@ -1254,3 +1254,34 @@
   bg-color-light: bg-color-light,
   bg-color-dark: bg-color-dark,
 )
+
+// Diagram renderer with theme support
+//
+// Parameters:
+// - diagram-content: The diagram content or a function that takes edge style and returns the content
+#let diagram-frame(diagram-content) = {
+  let target = get-target()
+  if target == "web" or target == "html" {
+    theme-frame(
+      tag: "div",
+      theme => {
+        let edge = edge.with(stroke: theme.main-color)
+        let it = [$
+            #{
+              if type(diagram-content) == function {
+                diagram-content(edge)
+              } else { diagram-content }
+            }
+          $]
+        set text(fill: theme.main-color, size: math-size, font: math-font)
+        span-frame(attrs: (class: "block-equation"), it)
+      },
+    )
+  } else {
+    if type(diagram-content) == function {
+      diagram-content(edge)
+    } else {
+      diagram-content
+    }
+  }
+}
