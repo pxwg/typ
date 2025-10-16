@@ -881,86 +881,186 @@
   border-color-dark: rgb("#5dade2"),
   bg-color-light: rgb("#e8f4f8"),
   bg-color-dark: rgb("#1a2332"),
+  collapsible: false,
+  collapsed: false,
 ) = {
   let target = get-target()
   if target == "web" or target == "html" {
-    theme-frame(
-      tag: "div",
-      theme => {
-        let border-color = if theme.is-dark {
-          border-color-dark.to-hex()
-        } else {
-          border-color-light.to-hex()
-        }
+    context {
+      theme-frame(
+        tag: "div",
+        theme => {
+          let border-color = if theme.is-dark {
+            border-color-dark.to-hex()
+          } else {
+            border-color-light.to-hex()
+          }
 
-        let bg-color = if theme.is-dark {
-          bg-color-dark.to-hex()
-        } else {
-          bg-color-light.to-hex()
-        }
+          let bg-color = if theme.is-dark {
+            bg-color-dark.to-hex()
+          } else {
+            bg-color-light.to-hex()
+          }
 
-        let text-color = if theme.is-dark {
-          "#e8e8e8"
-        } else {
-          "#2c3e50"
-        }
+          let text-color = if theme.is-dark {
+            "#e8e8e8"
+          } else {
+            "#2c3e50"
+          }
 
-        let title-color = if theme.is-dark {
-          border-color-dark.to-hex()
-        } else {
-          border-color-light.to-hex()
-        }
+          let title-color = if theme.is-dark {
+            border-color-dark.to-hex()
+          } else {
+            border-color-light.to-hex()
+          }
 
-        let style-str = (
-          "margin:0.5em 0;padding:0;"
-            + "border-left:3px solid "
-            + str(border-color)
-            + ";"
-            + "background:"
-            + str(bg-color)
-            + ";"
-            + "border-radius:4px;"
-            + "color:"
-            + str(text-color)
-            + ";"
-            + "box-shadow:0 1px 4px rgba(0,0,0,0.06);"
-            + "transition:all 0.3s ease;"
-        )
+          let button-color = if theme.is-dark {
+            "#95a5a6"
+          } else {
+            "#7f8c8d"
+          }
 
-        let title-style = (
-          "display:flex;align-items:center;gap:0.4em;"
-            + "padding:0.4em 0.7em;margin:0;"
-            + "font-weight:600;font-size:0.95em;"
-            + "color:"
-            + str(title-color)
-            + ";"
-            + "border-bottom:1px solid rgba(128,128,128,0.1);"
-        )
+          let style-str = (
+            "margin:0.5em 0;padding:0;"
+              + "border-left:3px solid "
+              + str(border-color)
+              + ";"
+              + "background:"
+              + str(bg-color)
+              + ";"
+              + "border-radius:4px;"
+              + "color:"
+              + str(text-color)
+              + ";"
+              + "box-shadow:0 1px 4px rgba(0,0,0,0.06);"
+              + "transition:all 0.3s ease;"
+          )
 
-        let content-style = "padding:0.3em 0.7em;line-height:1.5;font-size:0.95em;"
+          let title-style = (
+            "display:flex;align-items:center;gap:0.4em;"
+              + "padding:0.4em 0.7em;margin:0;"
+              + "font-weight:600;font-size:0.95em;"
+              + "color:"
+              + str(title-color)
+              + ";"
+              + "border-bottom:1px solid rgba(128,128,128,0.1);"
+              + (
+                if collapsible { "cursor:pointer;user-select:none;" } else {
+                  ""
+                }
+              )
+          )
 
-        let full-title = if number != none {
-          title + " " + str(number)
-        } else {
-          title
-        }
+          let button-style = (
+            "border:none;background:transparent;"
+              + "color:"
+              + str(button-color)
+              + ";"
+              + "font-size:1.2em;padding:0;margin:0 0 0 auto;"
+              + "transition:transform 0.2s ease,opacity 0.3s ease;"
+              + "opacity:0.7;line-height:1;"
+              + "pointer-events:none;"
+          )
 
-        html.elem(
-          "div",
-          attrs: (
-            class: "theorem-block",
-            style: style-str,
-          ),
-          [
-            #html.elem("div", attrs: (style: title-style), [
-              #html.elem("span", attrs: (style: "font-size:1em;"), icon)
-              #html.elem("span", full-title)
-            ])
-            #html.elem("div", attrs: (style: content-style), content)
-          ],
-        )
-      },
-    )
+          let content-wrapper-style = if collapsible and collapsed {
+            (
+              "overflow:hidden;transition:max-height 0.3s ease,opacity 0.3s ease;"
+                + "max-height:0px;opacity:0;"
+            )
+          } else {
+            (
+              "overflow:hidden;transition:max-height 0.3s ease,opacity 0.3s ease;"
+                + "max-height:1000px;opacity:1;"
+            )
+          }
+
+          let content-style = "padding:0.3em 0.7em;line-height:1.5;font-size:0.95em;"
+
+          let full-title = if number != none {
+            title + " " + str(number)
+          } else {
+            title
+          }
+
+          let initial-button-text = if collapsed { "+" } else { "−" }
+
+          if collapsible {
+            html.elem(
+              "div",
+              attrs: (
+                class: "theorem-block",
+                style: style-str,
+              ),
+              [
+                #html.elem(
+                  "div",
+                  attrs: (
+                    style: title-style,
+                    onclick: "
+                    const content = this.nextElementSibling;
+                    const button = this.querySelector('button');
+                    const isCollapsed = content.style.maxHeight === '0px';
+                    if (isCollapsed) {
+                      content.style.maxHeight = '1000px';
+                      content.style.opacity = '1';
+                      button.textContent = '−';
+                      button.style.transform = 'rotate(0deg)';
+                    } else {
+                      content.style.maxHeight = '0px';
+                      content.style.opacity = '0';
+                      button.textContent = '+';
+                      button.style.transform = 'rotate(90deg)';
+                    }
+                  ",
+                    onmouseover: "this.querySelector('button').style.opacity='1';",
+                    onmouseout: "if(this.nextElementSibling.style.maxHeight!=='0px')this.querySelector('button').style.opacity='0.7';",
+                  ),
+                  [
+                    #html.elem("span", attrs: (style: "font-size:1em;"), icon)
+                    #html.elem("span", full-title)
+                    #html.elem(
+                      "button",
+                      attrs: (
+                        style: button-style
+                          + (
+                            if collapsed { "transform:rotate(90deg);" } else {
+                              ""
+                            }
+                          ),
+                        "aria-label": "Toggle content",
+                      ),
+                      initial-button-text,
+                    )
+                  ],
+                )
+                #html.elem(
+                  "div",
+                  attrs: (style: content-wrapper-style),
+                  [
+                    #html.elem("div", attrs: (style: content-style), content)
+                  ],
+                )
+              ],
+            )
+          } else {
+            html.elem(
+              "div",
+              attrs: (
+                class: "theorem-block",
+                style: style-str,
+              ),
+              [
+                #html.elem("div", attrs: (style: title-style), [
+                  #html.elem("span", attrs: (style: "font-size:1em;"), icon)
+                  #html.elem("span", full-title)
+                ])
+                #html.elem("div", attrs: (style: content-style), content)
+              ],
+            )
+          }
+        },
+      )
+    }
   } else {
     let border-color = if is-dark-theme {
       border-color-dark
@@ -1006,7 +1106,13 @@
 }
 
 // Theorem
-#let theorem(content, title: "", number: none) = theorem-block(
+#let theorem(
+  content,
+  title: "",
+  number: none,
+  collapsible: false,
+  collapsed: false,
+) = theorem-block(
   content,
   title: "Theorem " + title,
   icon: "📐",
@@ -1015,10 +1121,17 @@
   border-color-dark: rgb("#5dade2"),
   bg-color-light: rgb("#e8f4f8"),
   bg-color-dark: rgb("#1a2332"),
+  collapsible: collapsible,
+  collapsed: collapsed,
 )
 
 // Claim
-#let claim(content, number: none) = theorem-block(
+#let claim(
+  content,
+  number: none,
+  collapsible: false,
+  collapsed: false,
+) = theorem-block(
   content,
   title: "Claim",
   icon: "💡",
@@ -1027,10 +1140,17 @@
   border-color-dark: rgb("#f4b350"),
   bg-color-light: rgb("#fef5e7"),
   bg-color-dark: rgb("#2d2416"),
+  collapsible: collapsible,
+  collapsed: collapsed,
 )
 
 // Remark
-#let remark(content, number: none) = theorem-block(
+#let remark(
+  content,
+  number: none,
+  collapsible: false,
+  collapsed: false,
+) = theorem-block(
   content,
   title: "Remark",
   icon: "💭",
@@ -1039,6 +1159,8 @@
   border-color-dark: rgb("#bb8fce"),
   bg-color-light: rgb("#f4ecf7"),
   bg-color-dark: rgb("#231c26"),
+  collapsible: collapsible,
+  collapsed: collapsed,
 )
 
 #let proof-counter = counter("proof-block-id")
@@ -1234,7 +1356,12 @@
 }
 
 // Question
-#let question(content, number: none) = theorem-block(
+#let question(
+  content,
+  number: none,
+  collapsible: false,
+  collapsed: false,
+) = theorem-block(
   content,
   title: "Question",
   icon: "❓",
@@ -1243,6 +1370,8 @@
   border-color-dark: rgb("#ec7063"),
   bg-color-light: rgb("#fadbd8"),
   bg-color-dark: rgb("#2b1a19"),
+  collapsible: collapsible,
+  collapsed: collapsed,
 )
 
 // Custom block with configurable colors
@@ -1255,6 +1384,8 @@
   border-color-dark: rgb("#48c9b0"),
   bg-color-light: rgb("#e8f8f5"),
   bg-color-dark: rgb("#19302b"),
+  collapsible: false,
+  collapsed: false,
 ) = theorem-block(
   content,
   title: title,
@@ -1264,6 +1395,8 @@
   border-color-dark: border-color-dark,
   bg-color-light: bg-color-light,
   bg-color-dark: bg-color-dark,
+  collapsible: collapsible,
+  collapsed: collapsed,
 )
 
 // Diagram renderer with theme support
