@@ -65,6 +65,7 @@
   math: "Math",
   quantum-field: "Quantum Field Theory",
   topology: "Topology",
+  geometry: "Geometry",
   algebra: "Algebra",
   category-theory: "Category Theory",
   abstract-nonsense: "Abstract Nonsense",
