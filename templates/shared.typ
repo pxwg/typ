@@ -1095,18 +1095,21 @@
           let header-style = (
             "display:flex;justify-content:space-between;align-items:center;"
               + "padding:0.5em 0.7em;margin:0;"
+              + "cursor:pointer;"
+              + "user-select:none;"
           )
 
           let title-style = "font-weight:600;font-style:normal;"
 
           let button-style = (
-            "cursor:pointer;border:none;background:transparent;"
+            "border:none;background:transparent;"
               + "color:"
               + str(button-color)
               + ";"
               + "font-size:1.2em;padding:0;margin:0;"
               + "transition:transform 0.2s ease,opacity 0.3s ease;"
               + "opacity:0.7;line-height:1;"
+              + "pointer-events:none;"
           )
 
           let content-wrapper-style = if collapsed {
@@ -1134,39 +1137,47 @@
               style: style-str,
             ),
             [
-              #html.elem("div", attrs: (style: header-style), [
-                #html.elem("span", attrs: (style: "font-size:1em;"), "📓")
-                #html.elem("span", title)
-                #html.elem(
-                  "button",
-                  attrs: (
-                    style: button-style
-                      + (
-                        if collapsed { "transform:rotate(90deg);" } else { "" }
-                      ),
-                    onclick: "
-                      const content = this.parentElement.nextElementSibling;
-                      const isCollapsed = content.style.maxHeight === '0px';
-                      if (isCollapsed) {
-                        content.style.maxHeight = '1000px';
-                        content.style.opacity = '1';
-                        this.textContent = '−';
-                        this.style.transform = 'rotate(0deg)';
-                      } else {
-                        content.style.maxHeight = '0px';
-                        content.style.opacity = '0';
-                        this.textContent = '+';
-                        this.style.transform = 'rotate(90deg)';
-                      }
-                      this.style.opacity = '1';
-                    ",
-                    onmouseover: "this.style.opacity='1';",
-                    onmouseout: "if(this.parentElement.nextElementSibling.style.maxHeight!=='0px')this.style.opacity='0.7';",
-                    "aria-label": "Toggle proof",
-                  ),
-                  initial-button-text,
-                )
-              ])
+              #html.elem(
+                "div",
+                attrs: (
+                  style: header-style,
+                  onclick: "
+                  const content = this.nextElementSibling;
+                  const button = this.querySelector('button');
+                  const isCollapsed = content.style.maxHeight === '0px';
+                  if (isCollapsed) {
+                    content.style.maxHeight = '1000px';
+                    content.style.opacity = '1';
+                    button.textContent = '−';
+                    button.style.transform = 'rotate(0deg)';
+                  } else {
+                    content.style.maxHeight = '0px';
+                    content.style.opacity = '0';
+                    button.textContent = '+';
+                    button.style.transform = 'rotate(90deg)';
+                  }
+                ",
+                  onmouseover: "this.querySelector('button').style.opacity='1';",
+                  onmouseout: "if(this.nextElementSibling.style.maxHeight!=='0px')this.querySelector('button').style.opacity='0.7';",
+                ),
+                [
+                  #html.elem("span", attrs: (style: "font-size:1em;"), "📓")
+                  #html.elem("span", title)
+                  #html.elem(
+                    "button",
+                    attrs: (
+                      style: button-style
+                        + (
+                          if collapsed { "transform:rotate(90deg);" } else {
+                            ""
+                          }
+                        ),
+                      "aria-label": "Toggle proof",
+                    ),
+                    initial-button-text,
+                  )
+                ],
+              )
               #html.elem(
                 "div",
                 attrs: (id: proof-id, style: content-wrapper-style),
@@ -1212,7 +1223,7 @@
       fill: bg-color,
       stroke: (left: 2pt + border-color),
       [
-        #text(fill: text-color, weight: "bold", size: 0.95em)[✓ #title.]
+        #text(fill: text-color, weight: "bold", size: 0.95em)[✅  #title.]
         #v(0.1em)
         #text(fill: text-color, style: "italic", size: 0.95em)[#content]
         #v(0.1em)
