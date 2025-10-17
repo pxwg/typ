@@ -105,6 +105,7 @@
 #let conf(
   title: "Title",
   desc: "",
+  region: none,
   date: "2025-10-01",
   tags: "",
   lang: "en",
