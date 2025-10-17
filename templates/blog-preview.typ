@@ -104,6 +104,7 @@
 // Title and author information
 #let conf(
   title: "Title",
+  llm-translated: none,
   desc: "",
   region: none,
   date: "2025-10-01",
