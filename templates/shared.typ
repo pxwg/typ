@@ -1313,13 +1313,6 @@
                 attrs: (id: proof-id, style: content-wrapper-style),
                 [
                   #html.elem("div", attrs: (style: content-style), content)
-                  #html.elem(
-                    "div",
-                    attrs: (
-                      style: "text-align:right;padding:0 0.7em 0.5em 0.7em;font-style:normal;",
-                    ),
-                    [□],
-                  )
                 ],
               )
             ],
