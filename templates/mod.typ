@@ -69,6 +69,7 @@
   algebra: "Algebra",
   category-theory: "Category Theory",
   abstract-nonsense: "Abstract Nonsense",
+  prose: "Prose",
 )
 
 #let archive-tags = (
