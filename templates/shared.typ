@@ -823,10 +823,11 @@
       },
     )
   } else {
+    path = "../../content/article/en/" + path
     if desc != "" {
-      link(path)[open image] + [ (#desc)]
+      image(path)
     } else {
-      link(path)[open image]
+      image(path, alt: desc)
     }
   }
 }
