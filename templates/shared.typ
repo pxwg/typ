@@ -6,6 +6,7 @@
 #import templates: *
 #import "mod.typ": *
 #import "theme.typ": *
+#import "blog-preview.typ": preview_bool
 
 // Settings
 // todo: load from env or config?
@@ -1070,19 +1071,19 @@
       )
     }
   } else {
-    let border-color = if is-dark-theme {
+    let border-color = if is-dark-theme or preview_bool {
       border-color-dark
     } else {
       border-color-light
     }
 
-    let bg-color = if is-dark-theme {
+    let bg-color = if is-dark-theme or preview_bool {
       bg-color-dark
     } else {
       bg-color-light
     }
 
-    let text-color = if is-dark-theme {
+    let text-color = if is-dark-theme or preview_bool {
       rgb("#e8e8e8")
     } else {
       rgb("#2c3e50")
@@ -1321,19 +1322,19 @@
       )
     }
   } else {
-    let border-color = if is-dark-theme {
+    let border-color = if is-dark-theme or preview_bool {
       rgb("#7f8c8d")
     } else {
       rgb("#95a5a6")
     }
 
-    let bg-color = if is-dark-theme {
+    let bg-color = if is-dark-theme or preview_bool {
       rgb("#1c1e20")
     } else {
       rgb("#f9f9f9")
     }
 
-    let text-color = if is-dark-theme {
+    let text-color = if is-dark-theme or preview_bool {
       rgb("#d0d0d0")
     } else {
       rgb("#34495e")

@@ -39,6 +39,14 @@
 
 #let (colored, preview) = get_input(inputs)
 
+#let preview_bool = {
+  if preview == "true" {
+    true
+  } else {
+    false
+  }
+}
+
 #let get_color_scheme(input_value) = {
   if input_value == "false" {
     // identity function for the default color scheme
@@ -49,15 +57,15 @@
   } else {
     // use a slightly darker theme for colored scheme
     let dark_colors = (
-      background: rgb("#1e1e2e"),
-      text: rgb("#cdd6f4"),
-      blue: rgb("#89b4fa"),
-      maroon: rgb("#951f41"),
-      peach: rgb("#eba0ac"),
-      green: rgb("#a6e3a1"),
-      flamingo: rgb("#f2cdcd"),
-      lavender: rgb("#b4befe"),
-      mantle: rgb("#181825"),
+      background: rgb("#11262d"),
+      text: rgb("#c0c8cc"),
+      blue: rgb("#a8cbec"),
+      maroon: rgb("#e1b8d4"),
+      peach: rgb("#ebb8b5"),
+      green: rgb("#c6cb9f"),
+      flamingo: rgb("#e1c09d"),
+      lavender: rgb("#c7c0eb"),
+      mantle: rgb("#051a20"),
     )
     (
       background: doc => {
