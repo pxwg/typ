@@ -18,3 +18,4 @@
 [submodule "packages/ctez"]
 	path = packages/ctez
 	url = https://github.com/pxwg/cetz
+  branch = fix
