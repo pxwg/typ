@@ -17,5 +17,5 @@
 	branch = main
 [submodule "packages/ctez"]
 	path = packages/ctez
-	url = https://github.com/cetz-package/cetz.git
-	branch = master
+	url = https://github.com/pxwg/cetz.git
+	branch = fix
