@@ -15,3 +15,7 @@
 	path = packages/typst-fletcher
 	url = https://github.com/Jollywatt/typst-fletcher
 	branch = main
+[submodule "packages/ctez"]
+	path = packages/ctez
+	url = https://github.com/pxwg/cetz
+	branch = fix
