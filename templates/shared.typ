@@ -1155,6 +1155,25 @@
   collapsed: collapsed,
 )
 
+// Definition
+#let definition(
+  content,
+  number: none,
+  collapsible: false,
+  collapsed: false,
+) = theorem-block(
+  content,
+  title: "Definition",
+  icon: "📖",
+  number: number,
+  border-color-light: rgb("#27ae60"),
+  border-color-dark: rgb("#52be80"),
+  bg-color-light: rgb("#e8f8f5"),
+  bg-color-dark: rgb("#1a2e27"),
+  collapsible: collapsible,
+  collapsed: collapsed,
+)
+
 // Remark
 #let remark(
   content,
