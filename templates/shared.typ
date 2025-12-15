@@ -1161,6 +1161,7 @@
   number: none,
   collapsible: false,
   collapsed: false,
+  title: "Definition",
 ) = theorem-block(
   content,
   title: "Definition",
