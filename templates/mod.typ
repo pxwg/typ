@@ -70,6 +70,7 @@
   category-theory: "Category Theory",
   abstract-nonsense: "Abstract Nonsense",
   prose: "Prose",
+  sports: "Sports",
 )
 
 #let archive-tags = (
