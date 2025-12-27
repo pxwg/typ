@@ -92,7 +92,7 @@
   if preview == "true" {
     15pt
   } else {
-    10pt
+    11pt
   }
 }
 
@@ -113,6 +113,7 @@
 #let conf(
   title: "Title",
   llm-translated: none,
+  author: "Xinyu Xiang",
   desc: "",
   region: none,
   date: "2025-10-01",
@@ -149,7 +150,10 @@
     font: font,
   )
   align(center, text(textsize + 8pt)[ *#title* ])
-  align(center, text(textsize - 1pt)[ #emph(desc) ])
+  align(center, text(textsize - 2pt)[ #emph(author)])
+  if desc != "" {
+    align(center, text(textsize - 1pt)[ #emph(desc) ])
+  }
   align(center, text(textsize - 1pt)[ #emph(date) ])
   show math.equation: set text(font: math_font)
   doc
