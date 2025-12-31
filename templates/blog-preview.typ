@@ -212,14 +212,14 @@
   )
 }
 
-#let property(name: none, body) = {
+#let fact(name: none, body) = {
   box(
     stroke: 1pt + color_palette.blue,
     width: 100%,
     fill: color_palette.mantle,
     inset: (x: 8pt, y: 8pt),
     [
-      #if name != none [*Property* (#emph(name))] else [*Property*]
+      #if name != none [*Fact* (#emph(name))] else [*Fact*]
       #body
     ],
   )
