@@ -238,6 +238,19 @@
   )
 }
 
+#let corollary(name: none, body) = {
+  box(
+    stroke: 1pt + color_palette.maroon,
+    width: 100%,
+    fill: color_palette.mantle,
+    inset: (x: 8pt, y: 8pt),
+    [
+      #if name != none [*Corollary* (#emph(name))] else [*Corollary*]
+      #body
+    ],
+  )
+}
+
 #let proof(name: none, body) = {
   block(
     stroke: 1pt + color_palette.lavender,
