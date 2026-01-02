@@ -833,45 +833,75 @@
   }
 }
 
-#let image_gallery(paths: (), desc: "") = {
+#let image_gallery(
+  paths: (),
+  desc: "",
+  dark-adapt: false,
+  adapt-mode: "darken",
+) = {
   let target = get-target()
   if target == "html" or target == "web" {
-    let gallery = html.elem(
-      "div",
-      attrs: (
-        class: "image-gallery",
-        style: "display:flex;flex-direction:row;overflow-x:auto;gap:1em;"
-          + "padding:0.5em 0;background:transparent;align-items:center;justify-content:center;",
-      ),
-      paths
-        .map(path => {
-          html.elem(
-            "img",
-            attrs: (
-              src: path,
-              style: "max-width:300px;max-height:200px;width:auto;height:auto;display:block;object-fit:contain;border-radius:0.5em;flex:0 0 auto;",
-              loading: "lazy",
-              alt: "gallery image",
-            ),
-          )
-        })
-        .join(),
-    )
-    if desc != "" {
-      [
-        #gallery
-        #html.elem(
+    theme-frame(
+      tag: "div",
+      theme => {
+        let img-filter = if dark-adapt and theme.is-dark {
+          if adapt-mode == "invert" {
+            "invert(1) hue-rotate(180deg)"
+          } else if adapt-mode == "invert-no-hue" {
+            "invert(1)"
+          } else if adapt-mode == "darken" {
+            "brightness(0.8) contrast(1.1)"
+          } else {
+            "none"
+          }
+        } else {
+          "none"
+        }
+
+        let desc-color = if theme.is-dark { "#aaa" } else { "#888" }
+
+        let gallery = html.elem(
           "div",
           attrs: (
-            class: "gallery-desc",
-            style: "margin-top:1em;font-size:1em;color:#888;text-align:center;width:100%;",
+            class: "image-gallery",
+            style: "display:flex;flex-direction:row;overflow-x:auto;gap:1em;"
+              + "padding:0.5em 0;background:transparent;align-items:center;justify-content:center;",
           ),
-          [#desc],
+          paths
+            .map(path => {
+              html.elem(
+                "img",
+                attrs: (
+                  src: path,
+                  style: "max-width:300px;max-height:200px;width:auto;height:auto;display:block;object-fit:contain;border-radius:0.5em;flex:0 0 auto;filter:"
+                    + img-filter
+                    + ";transition:filter 0.3s ease;",
+                  loading: "lazy",
+                  alt: "gallery image",
+                ),
+              )
+            })
+            .join(),
         )
-      ]
-    } else {
-      gallery
-    }
+        if desc != "" {
+          [
+            #gallery
+            #html.elem(
+              "div",
+              attrs: (
+                class: "gallery-desc",
+                style: "margin-top:1em;font-size:1em;color:"
+                  + desc-color
+                  + ";text-align:center;width:100%;transition:color 0.3s ease;",
+              ),
+              [#desc],
+            )
+          ]
+        } else {
+          gallery
+        }
+      },
+    )
   } else {
     let imgs = paths.map(path => link(path)[open image]).join([ ])
     if desc != "" {
@@ -1125,7 +1155,7 @@
   collapsed: false,
 ) = theorem-block(
   content,
-  title: "Theorem " + title,
+  title: "Theorem " + if title != "" { "(" + title + ")" } else { "" },
   icon: "📐",
   number: number,
   border-color-light: rgb("#3498db"),
@@ -1190,6 +1220,86 @@
   border-color-dark: rgb("#bb8fce"),
   bg-color-light: rgb("#f4ecf7"),
   bg-color-dark: rgb("#231c26"),
+  collapsible: collapsible,
+  collapsed: collapsed,
+)
+
+// Proposition
+#let proposition(
+  content,
+  title: "",
+  number: none,
+  collapsible: false,
+  collapsed: false,
+) = theorem-block(
+  content,
+  title: "Proposition " + title,
+  icon: "🔷",
+  number: number,
+  border-color-light: rgb("#27ae60"),
+  border-color-dark: rgb("#52be80"),
+  bg-color-light: rgb("#e8f8f5"),
+  bg-color-dark: rgb("#1a2e27"),
+  collapsible: collapsible,
+  collapsed: collapsed,
+)
+
+// Fact
+#let fact(
+  content,
+  title: "",
+  number: none,
+  collapsible: false,
+  collapsed: false,
+) = theorem-block(
+  content,
+  title: "Fact " + title,
+  icon: "📌",
+  number: number,
+  border-color-light: rgb("#3498db"),
+  border-color-dark: rgb("#5dade2"),
+  bg-color-light: rgb("#e8f4f8"),
+  bg-color-dark: rgb("#1a2332"),
+  collapsible: collapsible,
+  collapsed: collapsed,
+)
+
+// Corollary
+#let corollary(
+  content,
+  title: "",
+  number: none,
+  collapsible: false,
+  collapsed: false,
+) = theorem-block(
+  content,
+  title: "Corollary " + title,
+  icon: "✨",
+  number: number,
+  border-color-light: rgb("#e74c3c"),
+  border-color-dark: rgb("#ec7063"),
+  bg-color-light: rgb("#fadbd8"),
+  bg-color-dark: rgb("#2b1a19"),
+  collapsible: collapsible,
+  collapsed: collapsed,
+)
+
+// Example
+#let example(
+  content,
+  title: "",
+  number: none,
+  collapsible: false,
+  collapsed: false,
+) = theorem-block(
+  content,
+  title: "Example " + title,
+  icon: "📝",
+  number: number,
+  border-color-light: rgb("#e67e22"),
+  border-color-dark: rgb("#f39c12"),
+  bg-color-light: rgb("#fef5e7"),
+  bg-color-dark: rgb("#2e2416"),
   collapsible: collapsible,
   collapsed: collapsed,
 )
