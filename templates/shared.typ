@@ -1546,12 +1546,12 @@
       theme => {
         let edge = edge.with(stroke: theme.main-color)
         let it = [$
-            #{
-              if type(diagram-content) == function {
-                diagram-content(edge)
-              } else { diagram-content }
-            }
-          $]
+          #{
+            if type(diagram-content) == function {
+              diagram-content(edge)
+            } else { diagram-content }
+          }
+        $]
         set text(fill: theme.main-color, size: math-size, font: math-font)
         span-frame(attrs: (class: "block-equation"), it)
       },
