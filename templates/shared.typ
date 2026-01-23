@@ -925,6 +925,7 @@
   collapsible: false,
   collapsed: false,
 ) = {
+  let icon = ""
   let target = get-target()
   if target == "web" or target == "html" {
     context {
@@ -1424,8 +1425,8 @@
                   onmouseout: "if(this.nextElementSibling.style.maxHeight!=='0px')this.querySelector('button').style.opacity='0.7';",
                 ),
                 [
-                  #html.elem("span", attrs: (style: "font-size:1em;"), "📓")
-                  #html.elem("span", title)
+                  //  #html.elem("span", attrs: (style: "font-size:1em;"), "📓")
+                  #html.elem("span", attrs: (style: "font-weight:400;"), title)
                   #html.elem(
                     "button",
                     attrs: (
