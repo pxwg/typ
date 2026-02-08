@@ -65,3 +65,21 @@
     }
   }
 }
+
+#let _chip(color, icon, label) = box(
+  fill: color.lighten(80%),
+  stroke: color,
+  radius: 4pt,
+  inset: (x: 4pt, y: 2pt),
+  outset: (y: 2pt),
+)[
+  #text(fill: color, size: 0.8em, weight: "bold")[#icon #label]
+]
+
+#let tag = (
+  todo: _chip(red, "💫", "TODO"),
+  idea: _chip(yellow.darken(20%), "💡", "IDEA"),
+  wip: _chip(blue, "🚧", "WIP"),
+  done: _chip(green, "✅", "DONE"),
+  archived: _chip(gray, "📦", "ARCHIVED"),
+)
