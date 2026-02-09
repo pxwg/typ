@@ -29,7 +29,7 @@
 #let show-reference(it) = {
   if it.element != none and it.element.func() == heading {
     let children = it.element.body
-    link(it.location())[[#children]]
+    link(it.target)[[#children]]
   } else {
     it
   }
