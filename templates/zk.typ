@@ -14,13 +14,22 @@
   let backlinks = all-refs.filter(it => it.target == target-label)
 
   if backlinks.len() > 0 {
+    let seen = ()
     text(gray)[
       _Referenced in:_
       #for backlink in backlinks [
         #let heading = query(
           selector(heading).before(backlink.location()),
         ).last()
-        [#link(backlink.location())[#heading.body]]
+        #if heading != none {
+          let key = if heading.has("label") { heading.label } else {
+            heading.location()
+          }
+          if not seen.contains(key) {
+            let _ = seen.push(key)
+            [[#link(backlink.location())[#heading.body]]]
+          }
+        }
       ]
     ]
   }
