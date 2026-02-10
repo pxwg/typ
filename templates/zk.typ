@@ -91,4 +91,17 @@
   wip: _chip(blue, "🚧", "WIP"),
   done: _chip(green, "✅", "DONE"),
   archived: _chip(gray, "📦", "ARCHIVED"),
+  sync: _chip(olive, "🔄", "SYNC-NEEDED"),
+  // below are custom tags for various use cases
+  zk: _chip(purple, "🗂️", "ZK"),
+  neovim: _chip(fuchsia, "🖥️", "NEOVIM"),
+  physics: _chip(orange, "🔬", "PHYSICS"),
+  math: _chip(teal, "📐", "MATH"),
+  qft: _chip(red.darken(20%), "⚛️", "QFT"),
+  classical-mechanics: _chip(blue.darken(20%), "⚙️", "CLASSICAL MECHANICS"),
+  quantum-mechanics: _chip(green.darken(20%), "🔮", "QUANTUM MECHANICS"),
+  voa: _chip(olive, "🔗", "VOA"),
+  rep-theory: _chip(eastern, "📊", "REP-THEORY"),
+  topology: _chip(blue.darken(20%), "🔗", "TOPOLOGY"),
+  geometry: _chip(teal, "📐", "GEOMETRY"),
 )
