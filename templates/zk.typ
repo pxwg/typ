@@ -106,4 +106,5 @@
   rep-theory: _chip(eastern, "📊", "REP-THEORY"),
   topology: _chip(blue.darken(20%), "🔗", "TOPOLOGY"),
   geometry: _chip(teal, "📐", "GEOMETRY"),
+  thinking: _chip(purple.darken(20%), "🤔", "THINKING"),
 )
