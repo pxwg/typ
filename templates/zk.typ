@@ -95,6 +95,8 @@
   // below are custom tags for various use cases
   zk: _chip(purple, "🗂️", "ZK"),
   neovim: _chip(fuchsia, "🖥️", "NEOVIM"),
+  typst: _chip(navy, "📄", "TYPST"),
+  coding: _chip(orange.darken(20%), "💻", "CODING"),
   physics: _chip(orange, "🔬", "PHYSICS"),
   math: _chip(teal, "📐", "MATH"),
   qft: _chip(red.darken(20%), "⚛️", "QFT"),
