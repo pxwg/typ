@@ -44,6 +44,56 @@
   }
 }
 
+// Display a warning for archived notes with a link to the alternative note
+// Example:
+// ```typ
+// = Old Wrong Thought <2602082130>
+// #tag.archived
+// #alternative_link(<2602112309>)
+// ```
+#let alternative_link(target-label) = {
+  (
+    "\n"
+      + box(
+        fill: orange.lighten(90%),
+        stroke: orange,
+        radius: 4pt,
+        inset: 8pt,
+        width: 100%,
+      )[
+        #text(fill: orange.darken(20%))[Archived: ]#text(
+          fill: gray,
+        )[This note has been replaced by a newer version. Please refer to: #ref(target-label)
+        ]
+      ]
+  )
+}
+
+// Display a evolution link for legacy notes, indicating that there are newer insights available
+// Example:
+// ```typ
+// = Old Valid Thought <2602082130>
+// #tag.idea #tag.legacy
+// #evolution_link(<2602112330>)
+// ```
+#let evolution_link(target-label) = {
+  (
+    "\n"
+      + box(
+        fill: blue.lighten(90%),
+        stroke: blue,
+        radius: 4pt,
+        inset: 8pt,
+        width: 100%,
+      )[
+        #text(fill: blue.darken(20%))[Legacy Note: ]#text(
+          fill: gray,
+        )[Newer insights available. Please refer to: #ref(target-label)
+        ]
+      ]
+  )
+}
+
 // Build a back-link list for the current note, which is determined by the nearest preceding heading. This allows us to see which notes link to the current note based on its heading.
 #let zettel(body) = {
   body
@@ -91,6 +141,7 @@
   wip: _chip(blue, "🚧", "WIP"),
   done: _chip(green, "✅", "DONE"),
   archived: _chip(gray, "📦", "ARCHIVED"),
+  legacy: _chip(eastern, "📜", "LEGACY"),
   sync: _chip(olive, "🔄", "SYNC-NEEDED"),
   // below are custom tags for various use cases
   zk: _chip(purple, "🗂️", "ZK"),
