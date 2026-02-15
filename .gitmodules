@@ -19,3 +19,6 @@
 	path = packages/ctez
 	url = https://github.com/pxwg/cetz
 	branch = fix
+[submodule "packages/cjk-unbreak"]
+	path = packages/cjk-unbreak
+	url = https://github.com/KZNS/cjk-unbreak.git

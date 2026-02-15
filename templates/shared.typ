@@ -1,3 +1,4 @@
+#import "../packages/cjk-unbreak.typ": *
 #import "../packages/typst-fletcher.typ": *
 #import "../packages/zebraw.typ": *
 #import "@preview/shiroa:0.2.3": (
@@ -269,6 +270,7 @@
   translationKey: "",
   body,
 ) = {
+  show: remove-cjk-break-space
   let is-same-kind = build-kind == kind
 
   show: it => if is-same-kind {

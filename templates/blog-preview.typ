@@ -1,6 +1,7 @@
 // Complied by: `typst --input colored=false --input preview=false main.typ` to generate the PDF
 // Packages
 // Custom color scheme
+#import "../packages/cjk-unbreak.typ": *
 #let color_platte = (
   background: white,
   text: black,
@@ -123,6 +124,7 @@
   doc,
 ) = {
   let textsize = custume_text.size
+  show: remove-cjk-break-space
   set page(
     fill: color_palette.background,
     paper: "a4",
