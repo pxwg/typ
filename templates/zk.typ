@@ -159,4 +159,5 @@
   geometry: _chip(teal, "📐", "GEOMETRY"),
   thinking: _chip(purple.darken(20%), "🤔", "THINKING"),
   root: _chip(green, "🌳", "ROOT"),
+  ag: _chip(orange, "🧠", "ALGEBRAIC-GEOMETRY"),
 )
