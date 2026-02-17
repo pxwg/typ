@@ -124,7 +124,7 @@
   doc,
 ) = {
   let textsize = custume_text.size
-  show: remove-cjk-break-space
+  // show: remove-cjk-break-space
   set page(
     fill: color_palette.background,
     paper: "a4",
