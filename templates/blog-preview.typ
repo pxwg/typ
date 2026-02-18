@@ -289,3 +289,14 @@
   topology: "Topology",
   abstract-nonsense: "Abstract Nonsense",
 )
+
+#let background(doc) = {
+  let textsize = custume_text.size
+  // show: remove-cjk-break-space
+  set text(
+    size: textsize,
+    fill: custume_text.fill,
+    font: font,
+  )
+  doc
+}

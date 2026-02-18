@@ -95,7 +95,7 @@
 }
 
 // Build a back-link list for the current note, which is determined by the nearest preceding heading. This allows us to see which notes link to the current note based on its heading.
-#let zettel(body) = {
+#let zettel-theme(body) = {
   body
 
   context {
