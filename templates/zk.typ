@@ -97,32 +97,6 @@
 // Build a back-link list for the current note, which is determined by the nearest preceding heading. This allows us to see which notes link to the current note based on its heading.
 #let zettel-theme(body) = {
   body
-
-  context {
-    let here-loc = here()
-
-    let all-headings = query(heading.where(level: 1))
-
-    let prev-headings = all-headings.filter(h => {
-      let h-pos = h.location().position()
-      let here-pos = here-loc.position()
-      (
-        h-pos.page < here-pos.page
-          or (h-pos.page == here-pos.page and h-pos.y < here-pos.y)
-      )
-    })
-
-    if prev-headings.len() == 0 {
-      text("Error: No preceding heading found.")
-    } else {
-      let current-note = prev-headings.last()
-
-      if current-note.has("label") {
-        let current-id = current-note.label
-        show-backlinks(current-id)
-      }
-    }
-  }
 }
 
 #let _chip(color, icon, label) = box(
