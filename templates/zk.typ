@@ -134,4 +134,5 @@
   thinking: _chip(purple.darken(20%), "🤔", "THINKING"),
   root: _chip(green, "🌳", "ROOT"),
   ag: _chip(orange, "🧠", "ALGEBRAIC-GEOMETRY"),
+  by-ai: _chip(gray, "🤖", "BY-AI"),
 )
