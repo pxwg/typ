@@ -63,7 +63,12 @@
       )[
         #text(fill: orange.darken(20%))[Archived: ]#text(
           fill: gray,
-        )[This note has been replaced by a newer version. Please refer to: #ref(target-label)
+        )[This note has been replaced by a newer version. Please refer to:
+          #context if query(target-label).len() > 0 {
+            ref(target-label)
+          } else {
+            "[" + str(target-label) + " not found]"
+          }
         ]
       ]
   )
