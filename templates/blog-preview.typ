@@ -14,7 +14,7 @@
   mantle: rgb("#f3f3f3"), // light gray for block backgrounds
 )
 
-#let font = (name: "Libertinus Serif")
+#let font = ((name: "Libertinus Serif"), (name: "LXGW WenKai Mono"))
 #let math_font = "Libertinus Math"
 
 // Colors controled by the `--input colored` variable passed in the command line or by default which is `false` and help to manage the default (preview in url) and uncolored (published in pdf) version.
@@ -27,6 +27,7 @@
 #let get_input(input_dict) = {
   let colored = true
   let preview = true
+  let concealed = false
   for (key, value) in input_dict {
     if key == "colored" {
       colored = value
@@ -34,11 +35,14 @@
     if key == "preview" {
       preview = value
     }
+    if key == "concealed" {
+      concealed = value
+    }
   }
-  return (colored: colored, preview: preview)
+  return (colored: colored, preview: preview, concealed: concealed)
 }
 
-#let (colored, preview) = get_input(inputs)
+#let (colored, preview, concealed) = get_input(inputs)
 
 #let preview_bool = {
   if preview == "true" {
@@ -123,42 +127,46 @@
   translationKey: none,
   doc,
 ) = {
-  let textsize = custume_text.size
-  // show: remove-cjk-break-space
-  set page(
-    fill: color_palette.background,
-    paper: "a4",
-    margin: margin,
-    header: context [
-      #set text(size: textsize)
-      #stack(
-        spacing: textsize / 2,
-        [#smallcaps[#date]
-          #h(1fr)
-          // #smallcaps[#title]
-          #h(1fr)
-          #counter(page).display(
-            "1/1",
-            both: true,
-          )],
-        line(length: 100%, stroke: 0.6pt + custume_text.fill),
-      )
-    ],
-  )
-  set par(justify: true)
-  set text(
-    size: textsize,
-    fill: custume_text.fill,
-    font: font,
-  )
-  align(center, text(textsize + 8pt)[ *#title* ])
-  align(center, text(textsize - 2pt)[ #emph(author)])
-  if desc != "" {
-    align(center, text(textsize - 1pt)[ #emph(desc) ])
+  if concealed == "true" {
+    doc
+  } else {
+    let textsize = custume_text.size
+    // show: remove-cjk-break-space
+    set page(
+      fill: color_palette.background,
+      paper: "a4",
+      margin: margin,
+      header: context [
+        #set text(size: textsize)
+        #stack(
+          spacing: textsize / 2,
+          [#smallcaps[#date]
+            #h(1fr)
+            // #smallcaps[#title]
+            #h(1fr)
+            #counter(page).display(
+              "1/1",
+              both: true,
+            )],
+          line(length: 100%, stroke: 0.6pt + custume_text.fill),
+        )
+      ],
+    )
+    set par(justify: true)
+    set text(
+      size: textsize,
+      fill: custume_text.fill,
+      font: font,
+    )
+    align(center, text(textsize + 8pt)[ *#title* ])
+    align(center, text(textsize - 2pt)[ #emph(author)])
+    if desc != "" {
+      align(center, text(textsize - 1pt)[ #emph(desc) ])
+    }
+    align(center, text(textsize - 1pt)[ #emph(date) ])
+    show math.equation: set text(font: math_font)
+    doc
   }
-  align(center, text(textsize - 1pt)[ #emph(date) ])
-  show math.equation: set text(font: math_font)
-  doc
 }
 
 // block styles
