@@ -28,6 +28,7 @@
   let colored = true
   let preview = true
   let concealed = false
+  let preview-concealer = false
   for (key, value) in input_dict {
     if key == "colored" {
       colored = value
@@ -38,11 +39,19 @@
     if key == "concealed" {
       concealed = value
     }
+    if key == "preview-concealer" {
+      preview-concealer = value
+    }
   }
-  return (colored: colored, preview: preview, concealed: concealed)
+  return (
+    colored: colored,
+    preview: preview,
+    concealed: concealed,
+    preview-concealer: preview-concealer,
+  )
 }
 
-#let (colored, preview, concealed) = get_input(inputs)
+#let (colored, preview, concealed, preview-concealer) = get_input(inputs)
 
 #let preview_bool = {
   if preview == "true" {
@@ -127,7 +136,7 @@
   translationKey: none,
   doc,
 ) = {
-  if concealed == "true" {
+  if concealed == "true" and preview-concealer == "true" {
     doc
   } else {
     let textsize = custume_text.size

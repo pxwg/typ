@@ -1,3 +1,5 @@
+#import "blog-preview.typ": preview-concealer
+
 // Zettelkasten template
 // This template is designed for creating and managing Zettelkasten notes. It includes features for linking notes together and displaying backlinks.
 
@@ -104,15 +106,28 @@
   body
 }
 
-#let _chip(color, icon, label) = box(
-  fill: color.lighten(80%),
-  stroke: color,
-  radius: 4pt,
-  inset: (x: 4pt, y: 2pt),
-  outset: (y: 2pt),
-)[
-  #text(fill: color, size: 0.8em, weight: "bold")[#icon #label]
-]
+#let _chip(color, icon, label) = {
+  let is-dark = preview-concealer == "true"
+
+  let bg-color = if is-dark { color.darken(85%) } else { color.lighten(80%) }
+  let stroke-color = if is-dark { color.darken(60%) } else { color }
+  let text-color = if is-dark { color.lighten(50%) } else { color.darken(20%) }
+
+  box(
+    fill: bg-color,
+    stroke: stroke-color,
+    radius: 4pt,
+    inset: (x: 4pt, y: 2pt),
+    outset: (y: 2pt),
+  )[
+    #text(
+      fill: text-color,
+      size: 0.8em,
+      weight: "bold",
+      font: "Hack Nerd Font Mono",
+    )[#icon #label]
+  ]
+}
 
 #let tag = (
   todo: _chip(red, "💫", "TODO"),
@@ -140,4 +155,5 @@
   root: _chip(green, "🌳", "ROOT"),
   ag: _chip(orange, "🧠", "ALGEBRAIC-GEOMETRY"),
   by-ai: _chip(gray, "🤖", "BY-AI"),
+  life: _chip(teal.darken(20%), "🌱", "LIFE"),
 )
