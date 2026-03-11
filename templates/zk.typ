@@ -129,11 +129,20 @@
   ]
 }
 
+#let status_tag(status) = {
+  if status == "todo" {
+    _chip(red, "💫", "TODO")
+  } else if status == "wip" {
+    _chip(blue, "🚧", "WIP")
+  } else if status == "done" {
+    _chip(green, "✅", "DONE")
+  } else {
+    none
+  }
+}
+
 #let tag = (
-  todo: _chip(red, "💫", "TODO"),
   idea: _chip(yellow.darken(20%), "💡", "IDEA"),
-  wip: _chip(blue, "🚧", "WIP"),
-  done: _chip(green, "✅", "DONE"),
   archived: _chip(gray, "📦", "ARCHIVED"),
   legacy: _chip(eastern, "📜", "LEGACY"),
   sync: _chip(olive, "🔄", "SYNC-NEEDED"),
