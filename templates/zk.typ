@@ -136,6 +136,8 @@
     _chip(blue, "🚧", "WIP")
   } else if status == "done" {
     _chip(green, "✅", "DONE")
+  } else if status == "none" {
+    _chip(gray, "❓", "NONE")
   } else {
     none
   }
