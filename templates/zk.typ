@@ -154,6 +154,7 @@
   typst: _chip(navy, "📄", "TYPST"),
   coding: _chip(orange.darken(20%), "💻", "CODING"),
   physics: _chip(orange, "🔬", "PHYSICS"),
+  algebra: _chip(blue, "🔢", "ALGEBRA"),
   math: _chip(teal, "📐", "MATH"),
   qft: _chip(red.darken(20%), "⚛️", "QFT"),
   classical-mechanics: _chip(blue.darken(20%), "⚙️", "CLASSICAL MECHANICS"),
