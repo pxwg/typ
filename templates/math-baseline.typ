@@ -37,6 +37,57 @@
   )
 }
 
+/// Themed variant of shift-inline-math: renders dark and light SVGs in one call
+/// so the counter increments only once, then wraps them in the standard
+/// `code-image themed` container that the site's CSS already handles.
+/// Measurement labels are placed only in the dark frame; both frames contain
+/// identical math (only fill differs) so their geometry is the same.
+#let shift-inline-math-themed(body, dark-fill, light-fill) = context {
+  let formula-cnt = inline-math-count.get().first()
+  inline-math-count.step()
+  let wrapper = text.with(top-edge: "bounds", bottom-edge: "bounds")
+  html.elem(
+    "span",
+    {
+      // Dark version — carries the measurement labels.
+      html.elem(
+        "span",
+        {
+          set text(fill: dark-fill)
+          html.frame(wrapper(
+            math.attach(math.limits(body.body), b: pad([#none#math-bot-label], -1em)) +
+            sym.wj +
+            math.attach(math.limits([#none]), b: pad([#none#math-ref-bot-label], -1em)),
+          ))
+        },
+        attrs: (class: "dark typst-inline-math"),
+      )
+      // Light version — same structure but no labels (geometry is identical).
+      html.elem(
+        "span",
+        {
+          set text(fill: light-fill)
+          html.frame(wrapper(
+            math.attach(math.limits(body.body), b: pad([#none], -1em)) +
+            sym.wj +
+            math.attach(math.limits([#none]), b: pad([#none], -1em)),
+          ))
+        },
+        attrs: (class: "light typst-inline-math"),
+      )
+    },
+    attrs: (
+      class: "code-image themed typst-inline-math-wrapper",
+      style: "vertical-align: -"
+        + str(calc.round(
+          y-shifts.final().at(formula-cnt, default: 0pt) / text.size,
+          digits: 2,
+        ))
+        + "em;",
+    ),
+  )
+}
+
 #let html-export-template(doc) = context {
   if target() != "html" {
     return doc

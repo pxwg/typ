@@ -18,7 +18,7 @@
 #import if use-mathyml { prelude } else { _empty }: *
 #import "math-baseline.typ": (
   inline-math-count, math-bot-label, math-ref-bot-label, shift-inline-math,
-  y-shifts,
+  shift-inline-math-themed, y-shifts,
 )
 
 // Metadata
@@ -123,8 +123,8 @@
   show math.equation.where(block: false): it => context if (
     shiroa-sys-target() == "html"
   ) {
-    set text(fill: main-color, size: math-size, font: math-font)
-    shift-inline-math(it)
+    set text(size: math-size, font: math-font)
+    shift-inline-math-themed(it, dark-theme.main-color, light-theme.main-color)
   } else {
     it
   }
