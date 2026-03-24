@@ -16,6 +16,7 @@
 #import "../packages/mathyml.typ": prelude
 #import "empty.typ" as _empty
 #import if use-mathyml { prelude } else { _empty }: *
+#import "math-baseline.typ": shift-inline-math, math-bot-label, math-ref-bot-label, y-shifts, inline-math-count
 
 // Metadata
 #let is-html-target = is-html-target()
@@ -119,17 +120,30 @@
   show math.equation.where(block: false): it => context if (
     shiroa-sys-target() == "html"
   ) {
-    theme-frame(
-      tag: "span",
-      theme => {
-        set text(fill: theme.main-color, size: math-size, font: math-font)
-        span-frame(attrs: (class: "inline-equation"), it)
-      },
-    )
+    set text(fill: main-color, size: math-size, font: math-font)
+    shift-inline-math(it)
   } else {
     it
   }
   body
+  if sys-is-html-target {
+    context {
+      let math-bots = query(math-bot-label)
+      let math-ref-bots = query(math-ref-bot-label)
+      if math-bots.len() == inline-math-count.get().first() {
+        assert(math-bots.len() == math-ref-bots.len())
+        let new-y-shifts = math-bots
+          .zip(math-ref-bots, exact: true)
+          .map(pair => {
+            let (math-bot, math-ref-bot) = pair
+            let y1 = math-bot.location().position().y
+            let y2 = math-ref-bot.location().position().y
+            y1 - y2
+          })
+        y-shifts.update(old => new-y-shifts)
+      }
+    }
+  }
 }
 
 // https://codeberg.org/akida/mathyml
