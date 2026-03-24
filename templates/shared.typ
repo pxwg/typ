@@ -16,7 +16,10 @@
 #import "../packages/mathyml.typ": prelude
 #import "empty.typ" as _empty
 #import if use-mathyml { prelude } else { _empty }: *
-#import "math-baseline.typ": shift-inline-math, math-bot-label, math-ref-bot-label, y-shifts, inline-math-count
+#import "math-baseline.typ": (
+  inline-math-count, math-bot-label, math-ref-bot-label, shift-inline-math,
+  y-shifts,
+)
 
 // Metadata
 #let is-html-target = is-html-target()
