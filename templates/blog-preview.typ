@@ -244,6 +244,19 @@
   )
 }
 
+#let problem(name: none, body) = {
+  box(
+    stroke: 1pt + color_palette.maroon,
+    width: 100%,
+    fill: color_palette.mantle,
+    inset: (x: 8pt, y: 8pt),
+    [
+      #if name != none [*Problem* (#emph(name))] else [*Problem*]
+      #body
+    ],
+  )
+}
+
 #let remark(name: none, body) = {
   box(
     stroke: 1pt + color_palette.flamingo,
