@@ -169,4 +169,5 @@
   by-ai: _chip(gray, "🤖", "BY-AI"),
   life: _chip(teal.darken(20%), "🌱", "LIFE"),
   capture: _chip(blue, "📥", "CAPTURE"),
+  yau-contest: _chip(red, "🏆", "YAU-CONTEST"),
 )
