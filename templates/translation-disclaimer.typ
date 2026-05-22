@@ -32,9 +32,8 @@
   v(0.5em)
   block(
     width: 100%,
-    inset: 12pt,
-    radius: 6pt,
-    fill: rgb("#f8f9fa"),
+    inset: (left: 9pt, right: 0pt, top: 0pt, bottom: 0pt),
+    radius: 0pt,
     stroke: (left: 3pt + rgb("#007acc")),
     disclaimer-text,
   )
@@ -55,7 +54,7 @@
         "div",
         attrs: (
           class: "translation-disclaimer",
-          style: "margin:0.75em 0;padding:0.75em 0.9em;border-left:3px solid #007acc;background:#f8f9fa;border-radius:6px;color:#666;font-size:0.9em;line-height:1.35",
+          style: "margin:1em 0;padding:0 0 0 0.9em;border-left:3px solid #007acc;background:transparent;border-radius:0;box-shadow:none;color:#666;font-size:0.9em;line-height:1.35",
         ),
         [
           📝 #emph[翻译声明：] 本文由 LLM 从原文翻译而来，可能存在翻译不准确之处。建议阅读 #link(path)[原文] 以获得最准确的内容。
@@ -66,7 +65,7 @@
         "div",
         attrs: (
           class: "translation-disclaimer",
-          style: "margin:0.75em 0;padding:0.75em 0.9em;border-left:3px solid #007acc;background:#f8f9fa;border-radius:6px;color:#666;font-size:0.9em;line-height:1.35",
+          style: "margin:1em 0;padding:0 0 0 0.9em;border-left:3px solid #007acc;background:transparent;border-radius:0;box-shadow:none;color:#666;font-size:0.9em;line-height:1.35",
         ),
         [
           📝 #emph[Translation Notice:] This article was translated from the original by LLM and may contain inaccuracies. Please refer to the #link(path)[original article] for the most accurate content.
@@ -87,9 +86,8 @@
     v(0.5em)
     block(
       width: 100%,
-      inset: 12pt,
-      radius: 6pt,
-      fill: rgb("#f8f9fa"),
+      inset: (left: 9pt, right: 0pt, top: 0pt, bottom: 0pt),
+      radius: 0pt,
       stroke: (left: 3pt + rgb("#007acc")),
       disclaimer-text,
     )

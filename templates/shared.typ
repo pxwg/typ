@@ -17,6 +17,8 @@
 #import "empty.typ" as _empty
 #import if use-mathyml { prelude } else { _empty }: *
 #import "math-baseline.typ": (
+  assistive-mathml,
+  visible-mathml,
   inline-math-count, math-bot-label, math-ref-bot-label, shift-inline-math,
   shift-inline-math-themed, y-shifts,
 )
@@ -89,12 +91,11 @@
     set text(size: heading-sizes.at(it.level))
 
     block(
-      spacing: 0.7em * 1.5 * 1.2,
-      below: 0.7em * 1.2,
+      spacing: 0.55em,
+      below: 0.18em,
       {
         if is-web-target {
           show link: static-heading-link(it)
-          heading-hash(it, hash-color: dash-color)
         }
 
         it
@@ -107,44 +108,40 @@
 
 #let equation-rules(body) = {
   show math.equation: set text(font: math-font)
-  show math.equation.where(block: true): it => context if (
-    shiroa-sys-target() == "html"
-  ) {
-    theme-frame(
-      tag: "div",
-      theme => {
-        set text(fill: theme.main-color, size: math-size, font: math-font)
-        p-frame(attrs: ("class": "block-equation", "role": "math"), it)
-      },
+  show math.equation.where(block: false): it => context if sys-is-html-target {
+    set text(size: math-size, font: math-font)
+    visible-mathml(
+      it,
+      attrs: (class: "typst-inline-math typst-native-math"),
     )
   } else {
     it
   }
-  show math.equation.where(block: false): it => context if (
-    shiroa-sys-target() == "html"
-  ) {
+  show math.equation.where(block: true): it => context if sys-is-html-target {
     set text(size: math-size, font: math-font)
-    shift-inline-math-themed(it, dark-theme.main-color, light-theme.main-color)
+    visible-mathml(
+      it,
+      tag: "div",
+      attrs: (class: "typst-display-math typst-native-math"),
+    )
   } else {
     it
   }
   body
-  if sys-is-html-target {
-    context {
-      let math-bots = query(math-bot-label)
-      let math-ref-bots = query(math-ref-bot-label)
-      if math-bots.len() == inline-math-count.get().first() {
-        assert(math-bots.len() == math-ref-bots.len())
-        let new-y-shifts = math-bots
-          .zip(math-ref-bots, exact: true)
-          .map(pair => {
-            let (math-bot, math-ref-bot) = pair
-            let y1 = math-bot.location().position().y
-            let y2 = math-ref-bot.location().position().y
-            y1 - y2
-          })
-        y-shifts.update(old => new-y-shifts)
-      }
+  context if sys-is-html-target {
+    let math-bots = query(math-bot-label)
+    let math-ref-bots = query(math-ref-bot-label)
+    if math-bots.len() == inline-math-count.get().first() {
+      assert(math-bots.len() == math-ref-bots.len())
+      let new-y-shifts = math-bots
+        .zip(math-ref-bots, exact: true)
+        .map(pair => {
+          let (math-bot, math-ref-bot) = pair
+          let y1 = math-bot.location().position().y
+          let y2 = math-ref-bot.location().position().y
+          y1 - y2
+        })
+      y-shifts.update(old => new-y-shifts)
     }
   }
 }
@@ -280,7 +277,7 @@
   kind: "post",
   lang: none,
   region: none,
-  show-outline: true,
+  show-outline: false,
   archive-indices: (),
   archive-creator: default-archive-creator,
   llm-translated: false,
@@ -312,7 +309,7 @@
     show: it => if sys-is-html-target {
       show footnote: it => context {
         let num = counter(footnote).get().at(0)
-        link(label("footnote-" + str(num)), super(str(num)))
+        super(str(num))
       }
 
       it
@@ -449,20 +446,6 @@
     body
   }
 
-  context if is-same-kind and sys-is-html-target {
-    query(footnote)
-      .enumerate()
-      .map(((idx, it)) => {
-        enum.item[
-          #html.elem(
-            "div",
-            attrs: ("data-typst-label": "footnote-" + str(idx + 1)),
-            it.body,
-          )
-        ]
-      })
-      .join()
-  }
 }
 
 // Translation disclaimer template for blog localization
@@ -488,9 +471,8 @@
   v(0.5em)
   block(
     width: 100%,
-    inset: 12pt,
-    radius: 6pt,
-    fill: rgb("#f8f9fa"),
+    inset: (left: 9pt, right: 0pt, top: 0pt, bottom: 0pt),
+    radius: 0pt,
     stroke: (left: 3pt + rgb("#007acc")),
     disclaimer-text,
   )
@@ -512,15 +494,6 @@
       theme => {
         // derive colors from theme (fallbacks similar to code block logic)
         let border-color = theme.dash-color.to-hex()
-        let bg-color = if theme.is-dark {
-          if theme.code-extra-colors.bg != none {
-            theme.code-extra-colors.bg.to-hex()
-          } else { "#202225" }
-        } else {
-          if theme.code-extra-colors.bg != none {
-            theme.code-extra-colors.bg.to-hex()
-          } else { "#f8f9fa" }
-        }
         let text-color = if theme.is-dark {
           if theme.code-extra-colors.fg != none {
             theme.code-extra-colors.fg.to-hex()
@@ -528,14 +501,13 @@
         } else { "#666666" }
 
         let style-str = (
-          "margin:0.75em 0;padding:0.75em 0.9em;"
+          "margin:1em 0;padding:0 0 0 0.9em;"
             + "border-left:3px solid "
             + str(border-color)
             + ";"
-            + "background:"
-            + str(bg-color)
-            + ";"
-            + "border-radius:6px;"
+            + "background:transparent;"
+            + "border-radius:0;"
+            + "box-shadow:none;"
             + "color:"
             + str(text-color)
             + ";"
@@ -558,15 +530,6 @@
     )
   } else {
     let border-color = dash-color
-    let bg-color = if is-dark-theme {
-      if code-extra-colors.bg != none { code-extra-colors.bg } else {
-        "#202225"
-      }
-    } else {
-      if code-extra-colors.bg != none { code-extra-colors.bg } else {
-        "#f8f9fa"
-      }
-    }
     let text-color = if is-dark-theme {
       if code-extra-colors.fg != none { code-extra-colors.fg } else {
         "#bbbbbb"
@@ -586,9 +549,8 @@
     v(0.5em)
     block(
       width: 100%,
-      inset: 12pt,
-      radius: 6pt,
-      fill: bg-color,
+      inset: (left: 9pt, right: 0pt, top: 0pt, bottom: 0pt),
+      radius: 0pt,
       stroke: (left: 3pt + border-color),
       disclaimer-text,
     )
@@ -636,51 +598,40 @@
       tag: "div",
       theme => {
         let border-color = theme.dash-color.to-hex()
-        let bg-color = if theme.is-dark {
-          if theme.code-extra-colors.bg != none {
-            theme.code-extra-colors.bg.to-hex()
-          } else { "#202225" }
-        } else {
-          if theme.code-extra-colors.bg != none {
-            theme.code-extra-colors.bg.to-hex()
-          } else { "#f8f9fa" }
-        }
         let text-color = if theme.is-dark {
           if theme.code-extra-colors.fg != none {
             theme.code-extra-colors.fg.to-hex()
           } else { "#e8e8e8" }
         } else { "#2c3e50" }
 
-        let title-color = if theme.is-dark { "#5dade2" } else { "#3498db" }
+        let title-color = border-color
 
         let style-str = (
-          "margin:0.75em 0;padding:0;"
+          "margin:1em 0;padding:0 0 0 0.9em;"
             + "font-size:0.95em;line-height:1.5"
             + ";border-left:4px solid "
             + str(border-color)
             + ";"
-            + "background:"
-            + str(bg-color)
-            + ";"
-            + "border-radius:8px;"
+            + "background:transparent;"
+            + "border-radius:0;"
             + "color:"
             + str(text-color)
             + ";"
-            + "box-shadow:0 2px 8px rgba(0,0,0,0.08);"
+            + "box-shadow:none;"
         )
 
         let title-style = (
           "display:flex;align-items:center;gap:0.5em;"
-            + "padding:0.6em 0.9em;margin:0;"
-            + "font-weight:600;font-size:0.95em;"
+            + "padding:0;margin:0 0 0.25em 0;"
+            + "font-weight:700;font-size:1em;"
             + "color:"
             + str(title-color)
             + ";"
-            + "border-bottom:1px solid rgba(128,128,128,0.15);"
+            + "border-bottom:0;"
         )
 
         let content-style = (
-          "padding:0.75em 0.9em;"
+          "padding:0;"
         )
 
         html.elem(
@@ -691,7 +642,6 @@
           ),
           [
             #html.elem("div", attrs: (style: title-style), [
-              #html.elem("span", attrs: (style: "font-size:1.1em;"), icon)
               #html.elem("span", title)
             ])
             #html.elem("div", attrs: (style: content-style), content)
@@ -701,15 +651,6 @@
     )
   } else {
     let border-color = dash-color
-    let bg-color = if is-dark-theme {
-      if code-extra-colors.bg != none { code-extra-colors.bg } else {
-        "#202225"
-      }
-    } else {
-      if code-extra-colors.bg != none { code-extra-colors.bg } else {
-        "#f8f9fa"
-      }
-    }
     let text-color = if is-dark-theme {
       if code-extra-colors.fg != none { code-extra-colors.fg } else {
         "#e8e8e8"
@@ -718,12 +659,11 @@
 
     block(
       width: 100%,
-      inset: (left: 12pt, right: 12pt, top: 10pt, bottom: 10pt),
-      radius: 8pt,
-      fill: bg-color,
+      inset: (left: 9pt, right: 0pt, top: 0pt, bottom: 0pt),
+      radius: 0pt,
       stroke: (left: 4pt + border-color),
       [
-        #text(fill: rgb("#3498db"), weight: "bold", size: 0.95em)[#icon #title]
+        #text(fill: border-color, weight: "bold", size: 1em)[#title]
         #v(0.3em)
         #text(fill: text-color, size: 0.95em)[#content]
       ],
@@ -951,60 +891,32 @@
       theme-frame(
         tag: "div",
         theme => {
-          let border-color = if theme.is-dark {
-            border-color-dark.to-hex()
-          } else {
-            border-color-light.to-hex()
-          }
-
-          let bg-color = if theme.is-dark {
-            bg-color-dark.to-hex()
-          } else {
-            bg-color-light.to-hex()
-          }
-
-          let text-color = if theme.is-dark {
-            "#e8e8e8"
-          } else {
-            "#2c3e50"
-          }
-
-          let title-color = if theme.is-dark {
-            border-color-dark.to-hex()
-          } else {
-            border-color-light.to-hex()
-          }
+          let border-color = if theme.is-dark { "#cf829e" } else { "#d3006a" }
 
           let button-color = if theme.is-dark {
-            "#95a5a6"
+            "#cf829e"
           } else {
-            "#7f8c8d"
+            "#d3006a"
           }
 
           let style-str = (
-            "margin:0.5em 0;padding:0;"
+            "margin:1em 0;padding:0 0 0 0.9em;"
               + "border-left:3px solid "
               + str(border-color)
               + ";"
-              + "background:"
-              + str(bg-color)
-              + ";"
-              + "border-radius:4px;"
-              + "color:"
-              + str(text-color)
-              + ";"
-              + "box-shadow:0 1px 4px rgba(0,0,0,0.06);"
-              + "transition:all 0.3s ease;"
+              + "background:transparent;"
+              + "border-radius:0;"
+              + "box-shadow:none;"
           )
 
           let title-style = (
             "display:flex;align-items:center;gap:0.4em;"
-              + "padding:0.4em 0.7em;margin:0;"
-              + "font-weight:600;font-size:0.95em;"
+              + "padding:0;margin:0 0 0.25em 0;"
+              + "font-weight:700;font-size:1em;"
               + "color:"
-              + str(title-color)
+              + str(border-color)
               + ";"
-              + "border-bottom:1px solid rgba(128,128,128,0.1);"
+              + "border-bottom:0;"
               + (
                 if collapsible { "cursor:pointer;user-select:none;" } else {
                   ""
@@ -1035,7 +947,7 @@
             )
           }
 
-          let content-style = "padding:0.3em 0.7em;line-height:1.5;font-size:0.95em;"
+          let content-style = "padding:0;line-height:inherit;font-size:1em;"
 
           let full-title = if number != none {
             title + " " + str(number)
@@ -1077,7 +989,6 @@
                     onmouseout: "if(this.nextElementSibling.style.maxHeight!=='0px')this.querySelector('button').style.opacity='0.7';",
                   ),
                   [
-                    #html.elem("span", attrs: (style: "font-size:1em;"), icon)
                     #html.elem("span", full-title)
                     #html.elem(
                       "button",
@@ -1112,7 +1023,6 @@
               ),
               [
                 #html.elem("div", attrs: (style: title-style), [
-                  #html.elem("span", attrs: (style: "font-size:1em;"), icon)
                   #html.elem("span", full-title)
                 ])
                 #html.elem("div", attrs: (style: content-style), content)
@@ -1123,23 +1033,7 @@
       )
     }
   } else {
-    let border-color = if is-dark-theme or preview_bool {
-      border-color-dark
-    } else {
-      border-color-light
-    }
-
-    let bg-color = if is-dark-theme or preview_bool {
-      bg-color-dark
-    } else {
-      bg-color-light
-    }
-
-    let text-color = if is-dark-theme or preview_bool {
-      rgb("#e8e8e8")
-    } else {
-      rgb("#2c3e50")
-    }
+    let border-color = if is-dark-theme or preview_bool { rgb("#cf829e") } else { rgb("#d3006a") }
 
     let full-title = if number != none {
       title + " " + str(number)
@@ -1149,18 +1043,17 @@
 
     block(
       width: 100%,
-      inset: (left: 10pt, right: 10pt, top: 6pt, bottom: 6pt),
-      radius: 4pt,
-      fill: bg-color,
+      inset: (left: 9pt, right: 0pt, top: 0pt, bottom: 0pt),
+      radius: 0pt,
       stroke: (left: 3pt + border-color),
       [
         #text(
           fill: border-color,
           weight: "bold",
-          size: 0.95em,
-        )[#icon #full-title]
+          size: 1em,
+        )[#full-title]
         #v(0.2em)
-        #text(fill: text-color, size: 0.95em)[#content]
+        #content
       ],
     )
   }
@@ -1341,18 +1234,6 @@
             "#95a5a6"
           }
 
-          let bg-color = if theme.is-dark {
-            "#1c1e20"
-          } else {
-            "#f9f9f9"
-          }
-
-          let text-color = if theme.is-dark {
-            "#d0d0d0"
-          } else {
-            "#34495e"
-          }
-
           let button-color = if theme.is-dark {
             "#95a5a6"
           } else {
@@ -1360,24 +1241,18 @@
           }
 
           let style-str = (
-            "margin:0.5em 0;padding:0;"
+            "margin:1em 0;padding:0 0 0 0.9em;"
               + "border-left:2px solid "
               + str(border-color)
               + ";"
-              + "background:"
-              + str(bg-color)
-              + ";"
-              + "border-radius:4px;"
-              + "color:"
-              + str(text-color)
-              + ";" // + "font-style:italic;"
-              // + "font-size:0.95em;"
-              + "transition:all 0.3s ease;"
+              + "background:transparent;"
+              + "border-radius:0;"
+              + "box-shadow:none;"
           )
 
           let header-style = (
             "display:flex;justify-content:space-between;align-items:center;"
-              + "padding:0.5em 0.7em;margin:0;"
+              + "padding:0;margin:0 0 0.25em 0;"
               + "cursor:pointer;"
               + "user-select:none;"
           )
@@ -1407,7 +1282,7 @@
             )
           }
 
-          let content-style = "padding:0 0.7em 0.5em 0.7em;"
+          let content-style = "padding:0;"
 
           let proof-id = "proof-" + str(proof-counter.get().first())
 
@@ -1480,28 +1355,15 @@
       rgb("#95a5a6")
     }
 
-    let bg-color = if is-dark-theme or preview_bool {
-      rgb("#1c1e20")
-    } else {
-      rgb("#f9f9f9")
-    }
-
-    let text-color = if is-dark-theme or preview_bool {
-      rgb("#d0d0d0")
-    } else {
-      rgb("#34495e")
-    }
-
     block(
       width: 100%,
-      inset: 6pt,
-      radius: 4pt,
-      fill: bg-color,
+      inset: (left: 9pt, right: 0pt, top: 0pt, bottom: 0pt),
+      radius: 0pt,
       stroke: (left: 2pt + border-color),
       [
-        #text(fill: text-color, weight: "bold", size: 0.95em)[✅  #title.]
+        #text(fill: border-color, weight: "bold", size: 1em)[#title.]
         #v(0.1em)
-        #text(fill: text-color, style: "italic", size: 0.95em)[#content]
+        #text(style: "italic")[#content]
         #v(0.1em)
         #align(right)[#text(style: "normal")[□]]
       ],

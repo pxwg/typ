@@ -4,25 +4,59 @@
 #let y-shifts = state("y-shifts", ())
 #let inline-math-count = counter("inline-math-count")
 
+#let assistive-mathml(body) = html.elem(
+  "mjx-assistive-mml",
+  attrs: (class: "assistive-mathml"),
+  {
+    show math.equation: it => it
+    body
+  },
+)
+
+#let visible-mathml(body, tag: "span", attrs: (:)) = html.elem(
+  tag,
+  attrs: attrs,
+  {
+    show math.equation: it => it
+    body
+  },
+)
+
+#let svg-baseline-marker(body) = body + box(
+  width: 0pt,
+  height: 0pt,
+  line(length: 0pt, stroke: rgb("ff00ff") + 1pt),
+)
+
+#let inline-math-baseline-probe(body) = html.elem(
+  "span",
+  html.frame(text.with(top-edge: "bounds", bottom-edge: "bounds")(
+    // Add invisible elements below the math body to measure its bottom position.
+    math.attach(math.limits(body.body), b: pad([#none#math-bot-label], -1em))
+      + sym.wj
+      + math.attach(math.limits([#none]), b: pad(
+        [#none#math-ref-bot-label],
+        -1em,
+      )),
+  )),
+  attrs: (class: "math-baseline-probe", "aria-hidden": "true"),
+)
+
 #let shift-inline-math(body) = context {
   let formula-cnt = inline-math-count.get().first()
   inline-math-count.step()
   let begin-loc = here()
-  // The wrapper ensures that the viewbox of rendered SVG math matches its bounding box.
   let wrapper = text.with(top-edge: "bounds", bottom-edge: "bounds")
-  // For debugging: draw red box around the wrapper
-  // let wrapper = it => box(wrapper(it), stroke: red)
   html.elem(
     "span",
-    html.frame(wrapper(
-      // Add invisible elements below the math body to measure its bottom position.
-      math.attach(math.limits(body.body), b: pad([#none#math-bot-label], -1em))
-        + sym.wj
-        + math.attach(math.limits([#none]), b: pad(
-          [#none#math-ref-bot-label],
-          -1em,
-        )),
-    )),
+    {
+      html.elem(
+        "span",
+        html.frame(wrapper(svg-baseline-marker(body))),
+        attrs: (class: "math-svg", "aria-hidden": "true"),
+      )
+      assistive-mathml(body)
+    },
     attrs: (
       // Rendered SVG defines its width & height in "em" units,
       // so we also convert y-shift relative to text size in "em" units.
@@ -49,32 +83,25 @@
   html.elem(
     "span",
     {
-      // Dark version — carries the measurement labels.
+      // Dark version.
       html.elem(
         "span",
         {
           set text(fill: dark-fill)
-          html.frame(wrapper(
-            math.attach(math.limits(body.body), b: pad([#none#math-bot-label], -1em)) +
-            sym.wj +
-            math.attach(math.limits([#none]), b: pad([#none#math-ref-bot-label], -1em)),
-          ))
+          html.frame(wrapper(svg-baseline-marker(body)))
         },
-        attrs: (class: "dark typst-inline-math"),
+        attrs: (class: "dark typst-inline-math math-svg", "aria-hidden": "true"),
       )
-      // Light version — same structure but no labels (geometry is identical).
+      // Light version.
       html.elem(
         "span",
         {
           set text(fill: light-fill)
-          html.frame(wrapper(
-            math.attach(math.limits(body.body), b: pad([#none], -1em)) +
-            sym.wj +
-            math.attach(math.limits([#none]), b: pad([#none], -1em)),
-          ))
+          html.frame(wrapper(svg-baseline-marker(body)))
         },
-        attrs: (class: "light typst-inline-math"),
+        attrs: (class: "light typst-inline-math math-svg", "aria-hidden": "true"),
       )
+      assistive-mathml(body)
     },
     attrs: (
       class: "code-image themed typst-inline-math-wrapper",
