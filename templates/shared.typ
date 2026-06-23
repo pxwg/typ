@@ -1,4 +1,3 @@
-#import "../packages/cjk-unbreak.typ": *
 #import "../packages/typst-fletcher.typ": *
 #import "../packages/zebraw.typ": *
 #import "@preview/shiroa:0.2.3": (
@@ -86,6 +85,11 @@
   set text(main-size) if sys-is-html-target
   set text(fill: rgb("dfdfd6")) if is-dark-theme and sys-is-html-target
   show link: set text(fill: dash-color)
+  let cjk-break-space-regex = regex("([\p{Han}，。；：！？‘’“”（）「」【】…—\p{Hiragana}\p{Katakana}]) +([\p{Han}，。；：！？‘’“”（）「」【】…—\p{Hiragana}\p{Katakana}])")
+  show cjk-break-space-regex: it => {
+    let m = it.text.match(cjk-break-space-regex)
+    m.captures.at(0) + m.captures.at(1)
+  }
 
   show heading: it => {
     set text(size: heading-sizes.at(it.level))
@@ -284,7 +288,6 @@
   translationKey: "",
   body,
 ) = {
-  show: remove-cjk-break-space
   let is-same-kind = build-kind == kind
 
   show: it => if is-same-kind {
