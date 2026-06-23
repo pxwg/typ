@@ -708,13 +708,13 @@
 //   * "invert": Full inversion with hue rotation (best for pure white backgrounds)
 //   * "invert-no-hue": Invert brightness only, preserving hue (best for colored diagrams)
 //   * "darken": Reduce brightness and increase contrast (best for general use)
-// - width-ratio (float): Horizontal screen width ratio (0.0-1.0, default: 0.6 = 60vw)
+// - width-ratio (float): Content-column width ratio (0.0-1.0, default: 1.0 = text width)
 #let image_viewer(
   path: "",
   desc: "",
   dark-adapt: false,
   adapt-mode: "darken",
-  width-ratio: 0.6,
+  width-ratio: 1.0,
 ) = {
   let target = get-target()
   if target == "html" or target == "web" {
@@ -742,24 +742,24 @@
           "#888"
         }
 
-        // Calculate width percentage (clamp between 10% and 100%)
+        // Calculate width percentage relative to the article text column.
         let width-percent = calc.max(10, calc.min(100, width-ratio * 100))
-        let max-width = str(width-percent) + "vw"
+        let content-width = str(width-percent) + "%"
 
         html.elem(
           "div",
           attrs: (
             class: "image-viewer",
-            style: "width:auto;height:auto;margin:min(0.5em,max(0.1em,3vw));display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:auto;padding:0.5em;",
+            style: "width:100%;height:auto;margin:1.15em 0;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:visible;padding:0;box-sizing:border-box;",
           ),
           [
             #html.elem(
               "img",
               attrs: (
                 src: path,
-                style: "max-width:"
-                  + max-width
-                  + ";max-height:200px;width:auto;height:auto;display:block;object-fit:contain;border-radius:0.5em;filter:"
+                style: "width:"
+                  + content-width
+                  + ";max-width:100%;height:auto;display:block;object-fit:contain;border-radius:0.5em;filter:"
                   + img-filter
                   + ";transition:filter 0.3s ease;",
                 loading: "lazy",
@@ -771,9 +771,11 @@
                 "div",
                 attrs: (
                   class: "image-desc",
-                  style: "margin-top:0.5em;font-size:0.9em;color:"
+                  style: "margin-top:0.55em;font-size:0.9em;color:"
                     + desc-color
-                    + ";text-align:center;max-width:33vw;transition:color 0.3s ease;",
+                    + ";text-align:center;width:"
+                    + content-width
+                    + ";max-width:100%;transition:color 0.3s ease;",
                 ),
                 [#desc],
               )
