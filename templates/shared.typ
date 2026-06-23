@@ -708,7 +708,8 @@
 //   * "invert": Full inversion with hue rotation (best for pure white backgrounds)
 //   * "invert-no-hue": Invert brightness only, preserving hue (best for colored diagrams)
 //   * "darken": Reduce brightness and increase contrast (best for general use)
-// - width-ratio (float): Content-column width ratio (0.0-1.0, default: 1.0 = text width)
+// - width-ratio (float): Maximum content-column width ratio (0.0-1.0, default: 1.0 = text width).
+//   Images render as min(intrinsic image width, this maximum width) to avoid blurry upscaling.
 #let image_viewer(
   path: "",
   desc: "",
@@ -742,7 +743,7 @@
           "#888"
         }
 
-        // Calculate width percentage relative to the article text column.
+        // Calculate the maximum width percentage relative to the article text column.
         let width-percent = calc.max(10, calc.min(100, width-ratio * 100))
         let content-width = str(width-percent) + "%"
 
@@ -757,9 +758,9 @@
               "img",
               attrs: (
                 src: path,
-                style: "width:"
+                style: "width:auto;max-width:"
                   + content-width
-                  + ";max-width:100%;height:auto;display:block;object-fit:contain;border-radius:0.5em;filter:"
+                  + ";height:auto;display:block;object-fit:contain;border-radius:0.5em;filter:"
                   + img-filter
                   + ";transition:filter 0.3s ease;",
                 loading: "lazy",
@@ -773,9 +774,9 @@
                   class: "image-desc",
                   style: "margin-top:0.55em;font-size:0.9em;color:"
                     + desc-color
-                    + ";text-align:center;width:"
+                    + ";text-align:center;max-width:"
                     + content-width
-                    + ";max-width:100%;transition:color 0.3s ease;",
+                    + ";transition:color 0.3s ease;",
                 ),
                 [#desc],
               )
