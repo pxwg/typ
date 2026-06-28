@@ -8,13 +8,6 @@
 #import "theme.typ": *
 #import "blog-preview.typ": preview_bool
 
-// Settings
-// todo: load from env or config?
-#let use-mathyml = false
-
-#import "../packages/mathyml.typ": prelude
-#import "empty.typ" as _empty
-#import if use-mathyml { prelude } else { _empty }: *
 #import "math-baseline.typ": (
   assistive-mathml,
   visible-mathml,
@@ -148,20 +141,6 @@
       y-shifts.update(old => new-y-shifts)
     }
   }
-}
-
-// https://codeberg.org/akida/mathyml
-#let mathyml-equation-rules(body) = {
-  // import "../packages/mathyml.typ" as mathyml: try-to-mathml
-  //
-  // // math rules
-  // show math.equation: try-to-mathml
-  // show math.equation: set text(weight: 500)
-  // // show math.equation: to-mathml
-  // mathyml.stylesheets(include-fonts: false)
-
-
-  body
 }
 
 #let code-block-rules(body) = {
@@ -303,7 +282,7 @@
       region: region,
     )
     // math setting
-    show: if use-mathyml { mathyml-equation-rules } else { equation-rules }
+    show: equation-rules
     // code block setting
     show: code-block-rules
     // visualization setting
