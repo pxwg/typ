@@ -742,7 +742,7 @@
                 src: path,
                 style: "width:auto;max-width:"
                   + content-width
-                  + ";height:auto;display:block;object-fit:contain;border-radius:0.5em;filter:"
+                  + ";height:auto;display:block;object-fit:contain;border-radius:0;filter:"
                   + img-filter
                   + ";transition:filter 0.3s ease;",
                 loading: "lazy",
@@ -817,7 +817,7 @@
                 "img",
                 attrs: (
                   src: path,
-                  style: "max-width:300px;max-height:200px;width:auto;height:auto;display:block;object-fit:contain;border-radius:0.5em;flex:0 0 auto;filter:"
+                  style: "max-width:300px;max-height:200px;width:auto;height:auto;display:block;object-fit:contain;border-radius:0;flex:0 0 auto;filter:"
                     + img-filter
                     + ";transition:filter 0.3s ease;",
                   loading: "lazy",
